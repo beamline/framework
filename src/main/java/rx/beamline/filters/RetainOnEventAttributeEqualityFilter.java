@@ -15,6 +15,7 @@ public class RetainOnEventAttributeEqualityFilter<T extends XAttribute> implemen
 	private String attributeName;
 	private Set<T> attributeValues;
 	
+	@SafeVarargs
 	public RetainOnEventAttributeEqualityFilter(String attributeName, T ...values) {
 		this.attributeName = attributeName;
 		this.attributeValues = new HashSet<T>(Arrays.asList(values));

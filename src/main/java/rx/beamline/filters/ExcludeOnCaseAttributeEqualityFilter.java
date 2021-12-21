@@ -15,6 +15,7 @@ public class ExcludeOnCaseAttributeEqualityFilter<T extends XAttribute> implemen
 	private String attributeName;
 	private Set<T> attributeValues;
 	
+	@SafeVarargs
 	public ExcludeOnCaseAttributeEqualityFilter(String attributeName, T ...values) {
 		this.attributeName = attributeName;
 		this.attributeValues = new HashSet<T>(Arrays.asList(values));

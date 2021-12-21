@@ -15,6 +15,7 @@ public class ExcludeOnEventAttributeEqualityFilter<T extends XAttribute> impleme
 	private String attributeName;
 	private Set<T> attributeValues;
 	
+	@SafeVarargs
 	public ExcludeOnEventAttributeEqualityFilter(String attributeName, T ...values) {
 		this.attributeName = attributeName;
 		this.attributeValues = new HashSet<T>(Arrays.asList(values));

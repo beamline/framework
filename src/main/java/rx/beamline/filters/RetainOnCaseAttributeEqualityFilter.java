@@ -15,6 +15,7 @@ public class RetainOnCaseAttributeEqualityFilter<T extends XAttribute> implement
 	private String attributeName;
 	private Set<T> attributeValues;
 	
+	@SafeVarargs
 	public RetainOnCaseAttributeEqualityFilter(String attributeName, T ...values) {
 		this.attributeName = attributeName;
 		this.attributeValues = new HashSet<T>(Arrays.asList(values));
