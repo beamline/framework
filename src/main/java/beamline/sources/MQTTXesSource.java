@@ -1,4 +1,4 @@
-package rx.beamline.sources;
+package beamline.sources;
 
 import java.util.Date;
 import java.util.UUID;

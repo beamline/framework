@@ -1,7 +1,9 @@
-package discovery.beamline.miners.basic;
+package beamline.miners;
 
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -9,7 +11,6 @@ import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XTrace;
 
 import beamline.models.algorithms.StreamMiningAlgorithm;
-import beamline.models.responses.Response;
 
 public class DiscoveryMiner extends StreamMiningAlgorithm<XTrace, ProcessMap> {
 
@@ -21,6 +22,10 @@ public class DiscoveryMiner extends StreamMiningAlgorithm<XTrace, ProcessMap> {
 	private double minDependency = 1d;
 	private int modelRefreshRate = 0;
 	
+	public DiscoveryMiner() {
+		
+	}
+	
 	public void setMinDependency(double minDependency) {
 		this.minDependency = minDependency;
 	}
@@ -28,35 +33,7 @@ public class DiscoveryMiner extends StreamMiningAlgorithm<XTrace, ProcessMap> {
 	public void setModelRefreshRate(int modelRefreshRate) {
 		this.modelRefreshRate = modelRefreshRate;
 	}
-
-	public ProcessMap mine(double threshold) {
-		ProcessMap process = new ProcessMap();
-		for (String activity : activities.keySet()) {
-			process.addActivity(activity, activities.get(activity) / maxActivityFreq);
-		}
-		for (Pair<String, String> relation : relations.keySet()) {
-			double dependency = relations.get(relation) / maxRelationsFreq;
-			if (dependency >= threshold) {
-				process.addRelation(relation.getLeft(), relation.getRight(), dependency);
-			}
-		}
-		Set<String> toRemove = new HashSet<String>();
-		Set<String> selfLoopsToRemove = new HashSet<String>();
-		for (String activity : activities.keySet()) {
-			if (process.isStartActivity(activity) && process.isEndActivity(activity)) {
-				toRemove.add(activity);
-			}
-			if (process.isIsolatedNode(activity)) {
-				selfLoopsToRemove.add(activity);
-			}
-		}
-		for (String activity : toRemove) {
-			process.removeActivity(activity);
-		}
-
-		return process;
-	}
-
+	
 	@Override
 	public ProcessMap ingest(XTrace event) {
 		String caseID = XConceptExtension.instance().extractName(event);
@@ -86,10 +63,32 @@ public class DiscoveryMiner extends StreamMiningAlgorithm<XTrace, ProcessMap> {
 		
 		return getLatestResponse();
 	}
+	
+	public ProcessMap mine(double threshold) {
+		ProcessMap process = new ProcessMap();
+		for (String activity : activities.keySet()) {
+			process.addActivity(activity, activities.get(activity) / maxActivityFreq);
+		}
+		for (Pair<String, String> relation : relations.keySet()) {
+			double dependency = relations.get(relation) / maxRelationsFreq;
+			if (dependency >= threshold) {
+				process.addRelation(relation.getLeft(), relation.getRight(), dependency);
+			}
+		}
+		Set<String> toRemove = new HashSet<String>();
+		Set<String> selfLoopsToRemove = new HashSet<String>();
+		for (String activity : activities.keySet()) {
+			if (process.isStartActivity(activity) && process.isEndActivity(activity)) {
+				toRemove.add(activity);
+			}
+			if (process.isIsolatedNode(activity)) {
+				selfLoopsToRemove.add(activity);
+			}
+		}
+		for (String activity : toRemove) {
+			process.removeActivity(activity);
+		}
 
-	@Override
-	public Stream<ProcessMap> stream() {
-		// TODO Auto-generated method stub
-		return null;
+		return process;
 	}
 }

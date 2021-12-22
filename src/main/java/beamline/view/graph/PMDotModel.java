@@ -1,4 +1,4 @@
-package discovery.beamline.view.graph;
+package beamline.view.graph;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import beamline.graphviz.Dot;
 import beamline.graphviz.DotNode;
-import discovery.beamline.miners.basic.ProcessMap;
+import beamline.miners.ProcessMap;
 
 
 /**

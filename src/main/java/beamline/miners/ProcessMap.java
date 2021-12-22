@@ -1,11 +1,11 @@
-package discovery.beamline.miners.basic;
+package beamline.miners;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import beamline.graphviz.Dot;
 import beamline.models.responses.GraphvizResponse;
-import discovery.beamline.view.graph.PMDotModel;
+import beamline.view.graph.PMDotModel;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ public class ProcessMap implements GraphvizResponse {
 
 	@Override
 	public Dot generateDot() {
-		return new PMDotModel(this, discovery.beamline.view.graph.ColorPalette.Colors.BLUE);
+		return new PMDotModel(this, beamline.view.graph.ColorPalette.Colors.BLUE);
 	}
 
 	public ProcessMap() {

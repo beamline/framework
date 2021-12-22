@@ -1,4 +1,4 @@
-package rx.beamline.sources;
+package beamline.sources;
 
 import io.reactivex.rxjava3.core.Observable;
 

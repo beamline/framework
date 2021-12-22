@@ -1,21 +1,20 @@
 package beamline.models.algorithms;
 
-import java.util.Iterator;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.functions.Consumer;
 
-import beamline.models.responses.Response;
-import beamline.models.streams.ObservableStream;
-
-public abstract class StreamMiningAlgorithm<T, K extends Response> implements ObservableStream<K> {
+public abstract class StreamMiningAlgorithm<T, K> implements Consumer<T> {
 
 	private int processedEvents = 0;
 	private K latestResponse;
+	private HookEventProcessing onBeforeEvent = null;
+	private HookEventProcessing onAfterEvent = null;
 	
-	protected abstract K ingest(T event);
+	public abstract K ingest(T event);
 	
-	public K process(T event) {
+	public void process(T event) {
 		this.processedEvents++;
 		latestResponse = ingest(event);
-		return latestResponse;
 	}
 	
 	public int getProcessedEvents() {
@@ -26,16 +25,27 @@ public abstract class StreamMiningAlgorithm<T, K extends Response> implements Ob
 		return latestResponse;
 	}
 	
+	public void setOnBeforeEvent(HookEventProcessing onBeforeEvent) {
+		this.onBeforeEvent = onBeforeEvent;
+	}
+	
+	public void setOnAfterEvent(HookEventProcessing onAfterEvent) {
+		this.onAfterEvent = onAfterEvent;
+	}
+	
 	protected K setLatestResponse(K latestResponse) {
 		this.latestResponse = latestResponse;
 		return latestResponse;
 	}
 	
 	@Override
-	public void prepare() throws Exception { }
-	
-	@Override
-	public Iterator<K> iterator() {
-		return null;
+	public void accept(@NonNull T t) throws Throwable {
+		if (onBeforeEvent != null) {
+			onBeforeEvent.trigger();
+		}
+		process(t);
+		if (onAfterEvent != null) {
+			onAfterEvent.trigger();
+		}
 	}
 }

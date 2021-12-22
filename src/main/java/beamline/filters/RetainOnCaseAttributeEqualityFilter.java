@@ -1,4 +1,4 @@
-package rx.beamline.filters;
+package beamline.filters;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -10,13 +10,13 @@ import org.deckfour.xes.model.XTrace;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.functions.Predicate;
 
-public class ExcludeOnEventAttributeEqualityFilter<T extends XAttribute> implements Predicate<XTrace> {
+public class RetainOnCaseAttributeEqualityFilter<T extends XAttribute> implements Predicate<XTrace> {
 
 	private String attributeName;
 	private Set<T> attributeValues;
 	
 	@SafeVarargs
-	public ExcludeOnEventAttributeEqualityFilter(String attributeName, T ...values) {
+	public RetainOnCaseAttributeEqualityFilter(String attributeName, T ...values) {
 		this.attributeName = attributeName;
 		this.attributeValues = new HashSet<T>(Arrays.asList(values));
 	}
@@ -27,7 +27,7 @@ public class ExcludeOnEventAttributeEqualityFilter<T extends XAttribute> impleme
 	
 	@Override
 	public boolean test(@NonNull XTrace t) throws Throwable {
-		return !attributeValues.contains(t.get(0).getAttributes().get(attributeName));
+		return attributeValues.contains(t.getAttributes().get(attributeName));
 	}
 
 }

@@ -1,4 +1,4 @@
-package rx.beamline.filters;
+package beamline.filters;
 
 import java.util.Arrays;
 import java.util.HashSet;

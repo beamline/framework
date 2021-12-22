@@ -1,4 +1,4 @@
-package discovery.beamline.view.graph;
+package beamline.view.graph;
 
 import java.awt.Color;
 

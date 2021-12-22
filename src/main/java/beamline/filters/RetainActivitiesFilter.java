@@ -1,12 +1,12 @@
-package rx.beamline.filters;
+package beamline.filters;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 
-public class ExcludeActivitiesFilter extends ExcludeOnEventAttributeEqualityFilter<XAttributeLiteral> {
+public class RetainActivitiesFilter extends RetainOnEventAttributeEqualityFilter<XAttributeLiteral> {
 
-	public ExcludeActivitiesFilter(String ...activities) {
+	public RetainActivitiesFilter(String ...activities) {
 		super(XConceptExtension.KEY_NAME);
 		
 		for (String activity : activities) {

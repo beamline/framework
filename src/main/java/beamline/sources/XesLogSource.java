@@ -1,4 +1,4 @@
-package rx.beamline.sources;
+package beamline.sources;
 
 import java.io.File;
 import java.util.Collections;
