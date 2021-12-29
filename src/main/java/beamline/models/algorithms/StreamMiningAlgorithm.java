@@ -1,10 +1,9 @@
 package beamline.models.algorithms;
 
-import beamline.models.responses.Response;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.functions.Consumer;
 
-public abstract class StreamMiningAlgorithm<T, K extends Response> implements Consumer<T> {
+public abstract class StreamMiningAlgorithm<T, K> implements Consumer<T> {
 
 	private int processedEvents = 0;
 	private K latestResponse;
