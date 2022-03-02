@@ -25,7 +25,7 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 
 public class XesLogSource implements XesSource {
 
-private static XFactory xesFactory = new XFactoryNaiveImpl();
+	private static XFactory xesFactory = new XFactoryNaiveImpl();
 	
 	private String fileName;
 	private XLog log;
