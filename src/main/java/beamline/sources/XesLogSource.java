@@ -23,6 +23,13 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableEmitter;
 import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 
+/**
+ * This implementation of a {@link XesSource} produces events according to the
+ * events contained in an {@link XLog}. The events are first sorted according to
+ * their timestamp and then sent. This source produces a cold observable.
+ * 
+ * @author Andrea Burattin
+ */
 public class XesLogSource implements XesSource {
 
 	private static XFactory xesFactory = new XFactoryNaiveImpl();
@@ -31,14 +38,28 @@ public class XesLogSource implements XesSource {
 	private XLog log;
 	private List<XTrace> events;
 	
+	/**
+	 * Constructs a source from the path of a log
+	 * 
+	 * @param fileName the file containing the log to use. The file can be
+	 * either a file parsed by {@link XesXmlGZIPParser} or {@link XesXmlParser}
+	 * (i.e., extensions <code>.xes.gz</code> or <code>.xes</code>). If the file
+	 * is none of these, then {@link #prepare()} will throw an exception.
+	 */
 	public XesLogSource(String fileName) {
 		this.fileName = fileName;
 	}
 	
+	/**
+	 * Constructs a source from the given log
+	 * 
+	 * @param log the log to use as source
+	 */
 	public XesLogSource(XLog log) {
 		this.log = log;
 	}
 	
+	@Override
 	public Observable<XTrace> getObservable() {
 		return Observable.create(new ObservableOnSubscribe<XTrace>() {
 			@Override
@@ -50,6 +71,7 @@ public class XesLogSource implements XesSource {
 		});
 	}
 	
+	@Override
 	public void prepare() throws Exception {
 		if (log == null) {
 			parseLog(fileName);

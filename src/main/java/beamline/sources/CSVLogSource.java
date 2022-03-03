@@ -20,6 +20,12 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableEmitter;
 import io.reactivex.rxjava3.core.ObservableOnSubscribe;
 
+/**
+ * This implementation of a {@link XesSource} produces events according to the
+ * events contained in a CSV file. This source produces a cold observable.
+ * 
+ * @author Andrea Burattin
+ */
 public class CSVLogSource implements XesSource {
 
 	private static XFactory xesFactory = new XFactoryNaiveImpl();
@@ -29,6 +35,26 @@ public class CSVLogSource implements XesSource {
 	private int activityNameColumn;
 	private CSVParser parser;
 	
+	/**
+	 * Constructs the source by providing a CSV parser.
+	 * 
+	 * <p>
+	 * A parser can be produced, for example with the following code:
+	 * <pre>
+	 * CSVParser parser = new CSVParserBuilder()
+	 *     .withSeparator(',')
+	 *     .withIgnoreQuotations(true)
+	 *     .build();
+	 * </pre>
+	 * 
+	 * @param filename the absolute path of the CSV file
+	 * @param caseIdColumn the id of the column containing the case id (counting
+	 * starts from 0)
+	 * @param activityNameColumn the id of the column containing the activity
+	 * name (counting starts from 0)
+	 * @param parser the parser to be used for parsing the CSV file
+	 * @throws IOException
+	 */
 	public CSVLogSource(String filename, int caseIdColumn, int activityNameColumn, CSVParser parser) throws IOException {
 		this.filename = filename;
 		this.caseIdColumn = caseIdColumn;
@@ -36,6 +62,16 @@ public class CSVLogSource implements XesSource {
 		this.parser = parser;
 	}
 	
+	/**
+	 * Constructs the source
+	 * 
+	 * @param filename the absolute path of the CSV file
+	 * @param caseIdColumn the id of the column containing the case id (counting
+	 * starts from 0)
+	 * @param activityNameColumn the id of the column containing the activity
+	 * name (counting starts from 0)
+	 * @throws IOException
+	 */
 	public CSVLogSource(String filename, int caseIdColumn, int activityNameColumn) throws IOException {
 		this(filename, caseIdColumn, activityNameColumn, null);
 	}
