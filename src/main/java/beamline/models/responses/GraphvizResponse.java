@@ -13,7 +13,7 @@ public interface GraphvizResponse extends Response {
 	/**
 	 * Returns the Dot representation of the response
 	 * 
-	 * @return
+	 * @return the Dot representation of the response
 	 */
 	public abstract Dot generateDot();
 }

@@ -40,7 +40,7 @@ public class RetainOnEventAttributeEqualityFilter<T extends XAttribute> implemen
 	/**
 	 * Adds the value to the list of values to be considered for retention
 	 * 
-	 * @param value
+	 * @param value value
 	 */
 	public void addValue(T value) {
 		this.attributeValues.add(value);

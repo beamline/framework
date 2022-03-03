@@ -17,9 +17,9 @@ public class DirectlyFollowsRelation {
 	/**
 	 * Constructor
 	 * 
-	 * @param caseId
-	 * @param first
-	 * @param second
+	 * @param caseId the case id
+	 * @param first the first event
+	 * @param second the second event
 	 */
 	public DirectlyFollowsRelation(String caseId, XEvent first, XEvent second) {
 		this.caseId = caseId;
@@ -30,7 +30,7 @@ public class DirectlyFollowsRelation {
 	/**
 	 * Returns the case id this directly follows relation belongs to
 	 * 
-	 * @return
+	 * @return the case id
 	 */
 	public String getCaseId() {
 		return caseId;
@@ -39,7 +39,7 @@ public class DirectlyFollowsRelation {
 	/**
 	 * Returns the first event
 	 * 
-	 * @return
+	 * @return the first event
 	 */
 	public XEvent getFirst() {
 		return first;
@@ -48,7 +48,7 @@ public class DirectlyFollowsRelation {
 	/**
 	 * Returns the second event
 	 * 
-	 * @return
+	 * @return the second event
 	 */
 	public XEvent getSecond() {
 		return second;

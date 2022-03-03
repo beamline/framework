@@ -19,7 +19,7 @@ public interface Source<T> {
 	 * this method, it is important to prepare the source by calling the
 	 * {@link #prepare()} method.
 	 * 
-	 * @return
+	 * @return the {@link Observable}
 	 */
 	public Observable<T> getObservable();
 	
@@ -27,7 +27,9 @@ public interface Source<T> {
 	 * This method is supposed to be called before the {@link #getObservable()}
 	 * one: it is in charge of preparing the source to be processed.
 	 * 
-	 * @throws Exception 
+	 * @throws Exception while preparing the source, it is important to be aware
+	 * that some sources may generate specific exceptions (e.g., file not found,
+	 * network problems).
 	 */
 	public void prepare() throws Exception;
 }

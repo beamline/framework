@@ -1,6 +1,5 @@
 package beamline.sources;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -53,9 +52,8 @@ public class CSVLogSource implements XesSource {
 	 * @param activityNameColumn the id of the column containing the activity
 	 * name (counting starts from 0)
 	 * @param parser the parser to be used for parsing the CSV file
-	 * @throws IOException
 	 */
-	public CSVLogSource(String filename, int caseIdColumn, int activityNameColumn, CSVParser parser) throws IOException {
+	public CSVLogSource(String filename, int caseIdColumn, int activityNameColumn, CSVParser parser) {
 		this.filename = filename;
 		this.caseIdColumn = caseIdColumn;
 		this.activityNameColumn = activityNameColumn;
@@ -70,9 +68,8 @@ public class CSVLogSource implements XesSource {
 	 * starts from 0)
 	 * @param activityNameColumn the id of the column containing the activity
 	 * name (counting starts from 0)
-	 * @throws IOException
 	 */
-	public CSVLogSource(String filename, int caseIdColumn, int activityNameColumn) throws IOException {
+	public CSVLogSource(String filename, int caseIdColumn, int activityNameColumn) {
 		this(filename, caseIdColumn, activityNameColumn, null);
 	}
 

@@ -5,8 +5,8 @@ import io.reactivex.rxjava3.functions.Consumer;
 
 /**
  * This abstract class defines the root of the mining algorithms hierarchy. It
- * is a {@link Consumer} of elements with type <tt>T</tt> that is capable of
- * producing responses of a certain type <tt>K</tt>.
+ * is a {@link Consumer} of elements with type <code>T</code> that is capable of
+ * producing responses of a certain type <code>K</code>.
  * 
  * @author Andrea Burattin
  *
@@ -33,7 +33,7 @@ public abstract class StreamMiningAlgorithm<T, K> implements Consumer<T> {
 	/**
 	 * Returns the total number of events processed so far
 	 * 
-	 * @return
+	 * @return the total number of events processed so far
 	 */
 	public int getProcessedEvents() {
 		return processedEvents;
@@ -42,7 +42,7 @@ public abstract class StreamMiningAlgorithm<T, K> implements Consumer<T> {
 	/**
 	 * Returns the latest result of the mining
 	 * 
-	 * @return
+	 * @return the latest result of the mining
 	 */
 	public K getLatestResponse() {
 		return latestResponse;

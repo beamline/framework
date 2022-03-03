@@ -30,7 +30,9 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
  * source.prepare();
  * </pre>
  * 
- * @see {@link http://www.beamline.cloud/mqtt-xes/}
+ * <p>
+ * See also the documentation of MQTT-XES at http://www.beamline.cloud/mqtt-xes/
+ * 
  * @author Andrea Burattin
  */
 public class MQTTXesSource implements XesSource {

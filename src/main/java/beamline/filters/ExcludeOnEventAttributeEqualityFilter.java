@@ -40,7 +40,7 @@ public class ExcludeOnEventAttributeEqualityFilter<T extends XAttribute> impleme
 	/**
 	 * Adds the value to the list of values to be considered for removal
 	 * 
-	 * @param value
+	 * @param value value
 	 */
 	public void addValue(T value) {
 		this.attributeValues.add(value);
