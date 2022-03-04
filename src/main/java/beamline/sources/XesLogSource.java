@@ -67,6 +67,7 @@ public class XesLogSource implements XesSource {
 				for (XTrace wrapper : events) {
 					emitter.onNext(wrapper);
 				}
+				emitter.onComplete();
 			}
 		});
 	}

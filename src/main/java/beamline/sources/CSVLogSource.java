@@ -91,6 +91,7 @@ public class CSVLogSource implements XesSource {
 					eventWrapper.add(newEvent);
 					emitter.onNext(eventWrapper);
 				}
+				emitter.onComplete();
 			}
 		});
 	}
