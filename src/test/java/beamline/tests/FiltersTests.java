@@ -21,8 +21,6 @@ import io.reactivex.rxjava3.core.Observable;
 
 public class FiltersTests {
 
-	EventUtils e = new EventUtils();
-	
 	@Test
 	public void test_exclude_activities_on_name_filter() {
 		List<String> results = new ArrayList<String>();
