@@ -3,17 +3,17 @@ package beamline.sources;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
 
-import org.deckfour.xes.extension.std.XConceptExtension;
-import org.deckfour.xes.factory.XFactory;
-import org.deckfour.xes.factory.XFactoryNaiveImpl;
-import org.deckfour.xes.model.XEvent;
+import org.apache.commons.lang3.tuple.Pair;
 import org.deckfour.xes.model.XTrace;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
+import beamline.utils.EventUtils;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.ObservableEmitter;
@@ -27,7 +27,6 @@ import io.reactivex.rxjava3.core.ObservableOnSubscribe;
  */
 public class CSVLogSource implements XesSource {
 
-	private static XFactory xesFactory = new XFactoryNaiveImpl();
 	private CSVReader csvReader;
 	private String filename;
 	private int caseIdColumn;
@@ -80,16 +79,11 @@ public class CSVLogSource implements XesSource {
 			public void subscribe(@NonNull ObservableEmitter<@NonNull XTrace> emitter) throws Throwable {
 				String[] line;
 				while ((line = csvReader.readNext()) != null) {
-					XTrace eventWrapper = xesFactory.createTrace();
-					XEvent newEvent = xesFactory.createEvent();
-					XConceptExtension.instance().assignName(eventWrapper, line[caseIdColumn]);
-					XConceptExtension.instance().assignName(newEvent, line[activityNameColumn]);
+					List<Pair<String, String>> attributes = new LinkedList<Pair<String, String>>();
 					for (int i = 0; i < line.length; i++) {
-						String attributeName = "attribute_" + i;
-						newEvent.getAttributes().put(attributeName, xesFactory.createAttributeLiteral(attributeName, line[i], null));
+						attributes.add(Pair.of("attribute_" + i, line[i]));
 					}
-					eventWrapper.add(newEvent);
-					emitter.onNext(eventWrapper);
+					emitter.onNext(EventUtils.create(line[activityNameColumn], line[caseIdColumn], null, attributes));
 				}
 				emitter.onComplete();
 			}

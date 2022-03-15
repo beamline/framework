@@ -1,13 +1,7 @@
 package beamline.sources;
 
-import java.util.Date;
 import java.util.UUID;
 
-import org.deckfour.xes.extension.std.XConceptExtension;
-import org.deckfour.xes.extension.std.XTimeExtension;
-import org.deckfour.xes.factory.XFactory;
-import org.deckfour.xes.factory.XFactoryNaiveImpl;
-import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XTrace;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -16,6 +10,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import beamline.utils.EventUtils;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.PublishSubject;
 
@@ -37,7 +32,6 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
  */
 public class MQTTXesSource implements XesSource {
 
-	private static XFactory xesFactory = new XFactoryNaiveImpl();
 	private String processName;
 	private String brokerHost;
 	private String topicBase;
@@ -77,14 +71,7 @@ public class MQTTXesSource implements XesSource {
 				String partBeforeActName = topic.substring(0, posLastSlash);
 				String activityName = topic.substring(posLastSlash + 1);
 				String caseId = partBeforeActName.substring(partBeforeActName.lastIndexOf("/") + 1);
-
-				XEvent event = xesFactory.createEvent();
-				XConceptExtension.instance().assignName(event, activityName);
-				XTimeExtension.instance().assignTimestamp(event, new Date());
-				XTrace eventWrapper = xesFactory.createTrace();
-				XConceptExtension.instance().assignName(eventWrapper, caseId);
-				eventWrapper.add(event);
-				ps.onNext(eventWrapper);
+				ps.onNext(EventUtils.create(activityName, caseId));
 			}
 			
 			@Override

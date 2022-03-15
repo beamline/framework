@@ -37,15 +37,6 @@ public class RetainOnCaseAttributeEqualityFilter<T extends XAttribute> implement
 		this.attributeValues = new HashSet<T>(Arrays.asList(values));
 	}
 	
-	/**
-	 * Adds the value to the list of values to be considered for retention
-	 * 
-	 * @param value value
-	 */
-	public void addValue(T value) {
-		this.attributeValues.add(value);
-	}
-	
 	@Override
 	public boolean test(@NonNull XTrace t) throws Throwable {
 		return attributeValues.contains(t.getAttributes().get(attributeName));

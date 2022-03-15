@@ -37,15 +37,6 @@ public class ExcludeOnCaseAttributeEqualityFilter<T extends XAttribute> implemen
 		this.attributeValues = new HashSet<T>(Arrays.asList(values));
 	}
 	
-	/**
-	 * Adds the value to the list of values to be considered for removal
-	 * 
-	 * @param value value
-	 */
-	public void addValue(T value) {
-		this.attributeValues.add(value);
-	}
-	
 	@Override
 	public boolean test(@NonNull XTrace t) throws Throwable {
 		return !attributeValues.contains(t.getAttributes().get(attributeName));
