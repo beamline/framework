@@ -1,5 +1,4 @@
 package beamline.tests;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import beamline.models.algorithms.StreamMiningAlgorithm;
 import io.reactivex.rxjava3.core.Observable;
 
-class AlgorithmTests {
+public class AlgorithmTest {
 
 	Observable<Integer> o = Observable.just(3, 7, 11, 13);
 	
 	@Test
-	void test_result() {
+	public void test_result() {
 		StreamMiningAlgorithm<Integer, Integer> m = new StreamMiningAlgorithm<Integer, Integer>() {
 			public Integer product = 1;
 			
@@ -35,7 +34,7 @@ class AlgorithmTests {
 	}
 	
 	@Test
-	void test_hooks() {
+	public void test_hooks() {
 		StreamMiningAlgorithm<Integer, Integer> m = new StreamMiningAlgorithm<Integer, Integer>() {
 			public Integer product = 1;
 			
