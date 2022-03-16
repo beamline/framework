@@ -23,9 +23,7 @@ public class EventUtils {
 
 	private static final XFactory xesFactory = new XFactoryNaiveImpl();
 	
-	private EventUtils() {
-		throw new IllegalStateException("Utility class");
-	}
+	private EventUtils() { }
 	
 	/**
 	 * Creates a new {@link XTrace} referring to one event

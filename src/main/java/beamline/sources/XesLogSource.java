@@ -98,9 +98,9 @@ public class XesLogSource implements XesSource {
 		throw new SourceException("XES file format not supported");
 	}
 	
-	private void prepareStream() {
-		if (log == null) {
-			return;
+	private void prepareStream() throws SourceException {
+		if (log.isEmpty()) {
+			throw new SourceException("The given log is empty");
 		}
 		// populate all events
 		events = new LinkedList<>();
