@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 import beamline.models.algorithms.StreamMiningAlgorithm;
 import io.reactivex.rxjava3.core.Observable;
 
-public class AlgorithmTests {
+class AlgorithmTests {
 
 	Observable<Integer> o = Observable.just(3, 7, 11, 13);
 	
 	@Test
-	public void test_result() {
+	void test_result() {
 		StreamMiningAlgorithm<Integer, Integer> m = new StreamMiningAlgorithm<Integer, Integer>() {
 			public Integer product = 1;
 			
@@ -35,7 +35,7 @@ public class AlgorithmTests {
 	}
 	
 	@Test
-	public void test_hooks() {
+	void test_hooks() {
 		StreamMiningAlgorithm<Integer, Integer> m = new StreamMiningAlgorithm<Integer, Integer>() {
 			public Integer product = 1;
 			

@@ -1,5 +1,6 @@
 package beamline.sources;
 
+import beamline.exceptions.SourceException;
 import io.reactivex.rxjava3.core.Observable;
 
 /**
@@ -31,5 +32,5 @@ public interface Source<T> {
 	 * that some sources may generate specific exceptions (e.g., file not found,
 	 * network problems).
 	 */
-	public void prepare() throws Exception;
+	public void prepare() throws SourceException;
 }

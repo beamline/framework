@@ -26,7 +26,7 @@ import io.reactivex.rxjava3.functions.Function;
  */
 public class InfiniteSizeDirectlyFollowsMapper implements Function<XTrace, ObservableSource<DirectlyFollowsRelation>> {
 
-	private Map<String, XEvent> map = new HashMap<String, XEvent>();
+	private Map<String, XEvent> map = new HashMap<>();
 	
 	@Override
 	public @NonNull ObservableSource<DirectlyFollowsRelation> apply(@NonNull XTrace t) throws Throwable {

@@ -1,5 +1,6 @@
 package beamline.sources;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,6 +14,7 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
+import beamline.exceptions.SourceException;
 import beamline.utils.EventUtils;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observable;
@@ -79,7 +81,7 @@ public class CSVLogSource implements XesSource {
 			public void subscribe(@NonNull ObservableEmitter<@NonNull XTrace> emitter) throws Throwable {
 				String[] line;
 				while ((line = csvReader.readNext()) != null) {
-					List<Pair<String, String>> attributes = new LinkedList<Pair<String, String>>();
+					List<Pair<String, String>> attributes = new LinkedList<>();
 					for (int i = 0; i < line.length; i++) {
 						attributes.add(Pair.of("attribute_" + i, line[i]));
 					}
@@ -91,8 +93,13 @@ public class CSVLogSource implements XesSource {
 	}
 
 	@Override
-	public void prepare() throws Exception {
-		Reader reader = Files.newBufferedReader(Paths.get(filename));
+	public void prepare() throws SourceException {
+		Reader reader;
+		try {
+			reader = Files.newBufferedReader(Paths.get(filename));
+		} catch (IOException e) {
+			throw new SourceException(e.getMessage());
+		}
 		if (parser == null) {
 			csvReader = new CSVReader(reader);
 		} else {

@@ -20,10 +20,10 @@ import org.junit.jupiter.api.Test;
 import beamline.exceptions.EventException;
 import beamline.utils.EventUtils;
 
-public class UtilsTests {
+class UtilsTests {
 
 	@Test
-	public void test_create_event() {
+	void test_create_event() {
 		String activityName = UUID.randomUUID().toString();
 		String caseId = UUID.randomUUID().toString();
 		XTrace t = null;
@@ -37,7 +37,7 @@ public class UtilsTests {
 	}
 	
 	@Test
-	public void test_create_event_time() {
+	void test_create_event_time() {
 		String activityName = UUID.randomUUID().toString();
 		String caseId = UUID.randomUUID().toString();
 		Date date = Date.valueOf("1996-01-23");
@@ -53,7 +53,7 @@ public class UtilsTests {
 	}
 	
 	@Test
-	public void test_create_event_attributes() {
+	void test_create_event_attributes() {
 		String activityName = UUID.randomUUID().toString();
 		String caseId = UUID.randomUUID().toString();
 		Date date = Date.valueOf("1996-01-23");
@@ -82,7 +82,7 @@ public class UtilsTests {
 	}
 	
 	@Test
-	public void test_no_activityname() {
+	void test_no_activityname() {
 		assertThrows(EventException.class, () -> {
 			EventUtils.create(null, "");
 		});
@@ -92,7 +92,7 @@ public class UtilsTests {
 	}
 	
 	@Test
-	public void test_extract_name_case() throws EventException {
+	void test_extract_name_case() throws EventException {
 		String activityName = UUID.randomUUID().toString();
 		String caseId = UUID.randomUUID().toString();
 		XTrace t = EventUtils.create(activityName, caseId);

@@ -19,10 +19,10 @@ import beamline.filters.RetainOnCaseAttributeEqualityFilter;
 import beamline.utils.EventUtils;
 import io.reactivex.rxjava3.core.Observable;
 
-public class FiltersTests {
+class FiltersTests {
 
 	@Test
-	public void test_exclude_activities_on_name_filter() {
+	void test_exclude_activities_on_name_filter() {
 		List<String> results = new ArrayList<String>();
 		generateObservableSameCaseId()
 			.filter(new ExcludeActivitiesFilter("A"))
@@ -32,7 +32,7 @@ public class FiltersTests {
 	}
 	
 	@Test
-	public void test_retain_activities_on_name_filter() {
+	void test_retain_activities_on_name_filter() {
 		List<String> results = new ArrayList<String>();
 		generateObservableSameCaseId()
 			.filter(new RetainActivitiesFilter("A","B"))
@@ -42,7 +42,7 @@ public class FiltersTests {
 	}
 	
 	@Test
-	public void test_retain_activities_on_case_attribute_filter_1() {
+	void test_retain_activities_on_case_attribute_filter_1() {
 		List<String> results = new ArrayList<String>();
 		generateObservableSameCaseId()
 			.filter(new RetainOnCaseAttributeEqualityFilter<XAttributeLiteralImpl>(
@@ -54,7 +54,7 @@ public class FiltersTests {
 	}
 	
 	@Test
-	public void test_retain_activities_on_case_attribute_filter_2() {
+	void test_retain_activities_on_case_attribute_filter_2() {
 		List<String> results = new ArrayList<String>();
 		generateObservableSameCaseId()
 			.filter(new RetainOnCaseAttributeEqualityFilter<XAttributeLiteralImpl>(
@@ -67,7 +67,7 @@ public class FiltersTests {
 	}
 	
 	@Test
-	public void test_exclude_activities_on_case_attribute_filter_1() {
+	void test_exclude_activities_on_case_attribute_filter_1() {
 		List<String> results = new ArrayList<String>();
 		generateObservableSameCaseId()
 			.filter(new ExcludeOnCaseAttributeEqualityFilter<XAttributeLiteralImpl>(
@@ -79,7 +79,7 @@ public class FiltersTests {
 	}
 	
 	@Test
-	public void test_exclude_activities_on_case_attribute_filter_2() {
+	void test_exclude_activities_on_case_attribute_filter_2() {
 		List<String> results = new ArrayList<String>();
 		generateObservableSameCaseId()
 			.filter(new ExcludeOnCaseAttributeEqualityFilter<XAttributeLiteralImpl>(

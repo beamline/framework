@@ -11,8 +11,8 @@ import org.deckfour.xes.model.XEvent;
 public class DirectlyFollowsRelation {
 
 	private String caseId;
-	public XEvent first;
-	public XEvent second;
+	private XEvent first;
+	private XEvent second;
 	
 	/**
 	 * Constructor
