@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>beamline</groupId>
 	<artifactId>framework</artifactId>
-	<version>0.0.3</version>
+	<version>0.1.0</version>
 
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>
@@ -66,6 +66,8 @@
 			<artifactId>opencsv</artifactId>
 			<version>5.6</version>
 		</dependency>
+		
+		<!-- For testing only -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -76,6 +78,19 @@
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest</artifactId>
 			<version>2.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-broker</artifactId>
+			<version>5.17.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-mqtt</artifactId>
+			<version>5.17.0</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
