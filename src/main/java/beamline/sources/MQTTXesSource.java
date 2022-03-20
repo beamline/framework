@@ -1,8 +1,9 @@
 package beamline.sources;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.UUID;
 
-import org.deckfour.xes.model.XTrace;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -11,14 +12,12 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import beamline.events.BEvent;
 import beamline.exceptions.SourceException;
-import beamline.utils.EventUtils;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.subjects.PublishSubject;
 
 /**
- * This implementation of a {@link XesSource} produces events as they are
- * observed in an MQTT-XES broker. This source produces a hot observable.
+ * This implementation of a {@link BeamlineAbstractSource} produces events as
+ * they are observed in an MQTT-XES broker.
  * 
  * <p>
  * Example of usage:
@@ -32,12 +31,13 @@ import io.reactivex.rxjava3.subjects.PublishSubject;
  * 
  * @author Andrea Burattin
  */
-public class MQTTXesSource implements XesSource {
+public class MQTTXesSource extends BeamlineAbstractSource {
 
+	private static final long serialVersionUID = 7849358403852399322L;
 	private String processName;
 	private String brokerHost;
 	private String topicBase;
-	private PublishSubject<XTrace> ps;
+	private transient IMqttClient myClient;
 	
 	/**
 	 * Constructs the source
@@ -50,21 +50,15 @@ public class MQTTXesSource implements XesSource {
 		this.brokerHost = brokerHost;
 		this.topicBase = topicBase;
 		this.processName = processName;
-		this.ps = PublishSubject.create();
-	}
-	
-	@Override
-	public Observable<XTrace> getObservable() {
-		return ps;
 	}
 
 	@Override
-	public void prepare() throws SourceException {
+	public void run(SourceContext<BEvent> ctx) throws Exception {
+		Queue<BEvent> buffer = new LinkedList<>();
 		MqttConnectOptions options = new MqttConnectOptions();
 		options.setCleanSession(true);
 		options.setKeepAliveInterval(30);
 
-		IMqttClient myClient;
 		try {
 			myClient = new MqttClient(brokerHost, UUID.randomUUID().toString());
 			myClient.setCallback(new MqttCallback() {
@@ -75,7 +69,8 @@ public class MQTTXesSource implements XesSource {
 					String partBeforeActName = topic.substring(0, posLastSlash);
 					String activityName = topic.substring(posLastSlash + 1);
 					String caseId = partBeforeActName.substring(partBeforeActName.lastIndexOf("/") + 1);
-					ps.onNext(EventUtils.create(activityName, caseId));
+					BEvent b = BEvent.create(processName, activityName, caseId);
+					buffer.add(b);
 				}
 				
 				@Override
@@ -92,6 +87,25 @@ public class MQTTXesSource implements XesSource {
 			myClient.subscribe(topicBase + "/" + processName + "/#");
 		} catch (MqttException e) {
 			throw new SourceException(e.getMessage());
+		}
+		
+		while(isRunning()) {
+			while (buffer.isEmpty()) {
+				Thread.sleep(100l);
+			}
+			ctx.collect(buffer.poll());
+		}
+	}
+	
+	@Override
+	public void cancel() {
+		super.cancel();
+		if (myClient != null && myClient.isConnected()) {
+			try {
+				myClient.disconnect();
+			} catch (MqttException e) {
+				// nothing to do here
+			}
 		}
 	}
 

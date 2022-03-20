@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.flink.api.common.functions.FilterFunction;
+import org.apache.flink.api.common.functions.util.ListCollector;
+import org.apache.flink.api.java.ExecutionEnvironment;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.junit.jupiter.api.Test;
 
@@ -20,12 +23,21 @@ public class FiltersTest {
 
 	@Test
 	public void test_exclude_activities_on_name_filter() {
-		List<String> results = new ArrayList<String>();
-		Utils.generateObservableSameCaseId()
-			.filter(new ExcludeActivitiesFilter("A"))
-			.subscribe((t) -> results.add(EventUtils.getActivityName(t)));
-		assertEquals(3, results.size());
-		assertThat(results, hasItems("K","B","C"));
+		
+		FilterFunction f = new ExcludeActivitiesFilter("A");
+		
+		List<String> out = new ArrayList<>();
+		ListCollector<String> listCollector = new ListCollector<>(out);
+		
+		f.fil
+		
+		
+//		List<String> results = new ArrayList<String>();
+//		Utils.generateObservableSameCaseId()
+//			.filter(new ExcludeActivitiesFilter("A"))
+//			.subscribe((t) -> results.add(EventUtils.getActivityName(t)));
+//		assertEquals(3, results.size());
+//		assertThat(results, hasItems("K","B","C"));
 	}
 	
 	@Test

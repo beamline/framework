@@ -1,8 +1,6 @@
 package beamline.filters;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
-import org.deckfour.xes.model.XAttributeLiteral;
-import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 
 /**
  * A specific instance of the {@link ExcludeOnEventAttributeEqualityFilter} that
@@ -11,7 +9,9 @@ import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
  * @author Andrea Burattin
  *
  */
-public class ExcludeActivitiesFilter extends ExcludeOnEventAttributeEqualityFilter<XAttributeLiteral> {
+public class ExcludeActivitiesFilter extends ExcludeOnEventAttributeEqualityFilter<String> {
+
+	private static final long serialVersionUID = -5319332746992005641L;
 
 	/**
 	 * Constructors
@@ -22,7 +22,7 @@ public class ExcludeActivitiesFilter extends ExcludeOnEventAttributeEqualityFilt
 		super(XConceptExtension.KEY_NAME);
 		
 		for (String activity : activities) {
-			addValue(new XAttributeLiteralImpl(XConceptExtension.KEY_NAME, activity));
+			addValue(activity);
 		}
 	}
 }

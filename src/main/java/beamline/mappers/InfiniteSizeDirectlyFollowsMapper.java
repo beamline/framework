@@ -1,5 +1,5 @@
 package beamline.mappers;
-
+/*
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ import io.reactivex.rxjava3.functions.Function;
  * number of case ids grows as well.
  * 
  * @author Andrea Burattin
- */
+ *
 public class InfiniteSizeDirectlyFollowsMapper implements Function<XTrace, ObservableSource<DirectlyFollowsRelation>> {
 
 	private Map<String, XEvent> map = new HashMap<>();
@@ -47,3 +47,5 @@ public class InfiniteSizeDirectlyFollowsMapper implements Function<XTrace, Obser
 	}
 
 }
+*/
+class InfiniteSizeDirectlyFollowsMapper{}
