@@ -71,9 +71,13 @@ public class XesLogSource extends BeamlineAbstractSource {
 		while(i.hasNext() && isRunning()) {
 			BEvent event = i.next();
 			if (event.getEventTime() != null) {
-				ctx.collectWithTimestamp(event, event.getEventTime().getTime());
+				synchronized (ctx.getCheckpointLock()) {
+					ctx.collectWithTimestamp(event, event.getEventTime().getTime());
+				}
 			} else {
-				ctx.collect(i.next());
+				synchronized (ctx.getCheckpointLock()) {
+					ctx.collect(i.next());
+				}
 			}
 		}
 	}

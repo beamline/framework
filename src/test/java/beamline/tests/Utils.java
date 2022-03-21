@@ -48,10 +48,6 @@ public class Utils {
 //		return Observable.fromArray(events);
 //	}
 	
-	public static DataStream<BEvent> generateObservableSameCaseId(ExecutionEnvironment env) {
-		DataSet<BEvent> ds = CollectionDataSets.getCustomTypeDataSet(env);
-	}
-	
 	/*
 	 * c1: <K,A,B,A,C>
 	 * c2: <O,A,I,C>
