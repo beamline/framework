@@ -91,62 +91,90 @@ public class SourcesTest {
 		});
 	}
 	
-//	@Test
-//	public void test_xes_source_1() {
-//		XesLogSource s1 = new XesLogSource("src/test/resources/sources/empty.xes");
-//		assertThrowsExactly(SourceException.class, () -> s1.prepare());
-//		
-//		XesLogSource s2 = new XesLogSource("src/test/resources/sources/empty_2.xes");
-//		assertThrowsExactly(SourceException.class, () -> s2.prepare());
-//
-//		XesLogSource s3 = new XesLogSource("src/test/resources/sources/empty.csv");
-//		assertThrowsExactly(SourceException.class, () -> s3.prepare());
-//	}
-//	
-//	@Test
-//	public void test_xes_source_2() {
-//		List<String> acts = new LinkedList<>();
-//		List<String> caseIds = new LinkedList<>();
-//		XesLogSource s = new XesLogSource(Utils.generteXLog());
-//		try {
-//			s.prepare();
-//		} catch (SourceException e) {
-//			e.printStackTrace();
-//		}
-//		s.getObservable().subscribe((t) -> {
-//			acts.add(EventUtils.getActivityName(t));
-//			caseIds.add(EventUtils.getCaseId(t));
-//		});
-//		
-//		assertEquals(9, acts.size());
-//		assertEquals(9, caseIds.size());
-//		
-//		assertThat(acts, hasItems("K","C","A","I","B","O","A","A","C"));
-//		assertThat(caseIds, hasItems("c1","c2","c1","c2","c1","c2","c1","c2","c1"));
-//	}
-//	
-//	@Test
-//	public void test_xes_source_3() {
-//		List<String> acts = new LinkedList<>();
-//		List<String> caseIds = new LinkedList<>();
-//		XesLogSource s = new XesLogSource("src/test/resources/sources/source.xes.gz");
-//		try {
-//			s.prepare();
-//		} catch (SourceException e) {
-//			e.printStackTrace();
-//		}
-//		s.getObservable().subscribe((t) -> {
-//			acts.add(EventUtils.getActivityName(t));
-//			caseIds.add(EventUtils.getCaseId(t));
-//		});
-//		
-//		assertEquals(5, acts.size());
-//		assertEquals(5, caseIds.size());
-//		
-//		assertThat(acts, hasItems("a11","a21","a22","a12","a23"));
-//		assertThat(caseIds, hasItems("c1","c2","c2","c1","c2"));
-//	}
-//
+	@Test
+	public void test_xes_source_1() {
+		XesLogSource s1 = new XesLogSource("src/test/resources/sources/empty.xes");
+		assertThrowsExactly(JobExecutionException.class, () -> {
+			StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+			env.addSource(s1).map(e -> e).print();
+			env.execute();
+		});
+		
+		XesLogSource s2 = new XesLogSource("src/test/resources/sources/empty_2.xes");
+		assertThrowsExactly(JobExecutionException.class, () -> {
+			StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+			env.addSource(s2).map(e -> e).print();
+			env.execute();
+		});
+
+		XesLogSource s3 = new XesLogSource("src/test/resources/sources/empty.csv");
+		assertThrowsExactly(JobExecutionException.class, () -> {
+			StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+			env.addSource(s3).map(e -> e).print();
+			env.execute();
+		});
+	}
+	
+	@Test
+	public void test_xes_source_2() throws Exception {
+		List<String> acts = new LinkedList<>();
+		List<String> caseIds = new LinkedList<>();
+		XesLogSource source = new XesLogSource(Utils.generteXLog());
+		
+		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+		DataStream<BEvent> stream = env.addSource(source);
+		stream.executeAndCollect().forEachRemaining((BEvent e) -> {
+			acts.add(e.getEventName());
+			caseIds.add(e.getTraceName());
+		});
+		
+		assertEquals(9, acts.size());
+		assertEquals(9, caseIds.size());
+		
+		assertThat(acts, hasItems("K","C","A","I","B","O","A","A","C"));
+		assertThat(caseIds, hasItems("c1","c2","c1","c2","c1","c2","c1","c2","c1"));
+	}
+	
+	@Test
+	public void test_xes_source_3() throws Exception {
+		List<String> acts = new LinkedList<>();
+		List<String> caseIds = new LinkedList<>();
+		XesLogSource s = new XesLogSource("src/test/resources/sources/source.xes.gz");
+		
+		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+		DataStream<BEvent> stream = env.addSource(s);
+		stream.executeAndCollect().forEachRemaining((BEvent e) -> {
+			acts.add(e.getEventName());
+			caseIds.add(e.getTraceName());
+		});
+		
+		assertEquals(5, acts.size());
+		assertEquals(5, caseIds.size());
+		
+		assertThat(acts, hasItems("a11","a21","a22","a12","a23"));
+		assertThat(caseIds, hasItems("c1","c2","c2","c1","c2"));
+	}
+	
+	@Test
+	public void test_xes_source_4() throws Exception {
+		List<String> acts = new LinkedList<>();
+		List<String> caseIds = new LinkedList<>();
+		XesLogSource s = new XesLogSource("src/test/resources/sources/source_2.xes");
+		
+		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+		DataStream<BEvent> stream = env.addSource(s);
+		stream.executeAndCollect().forEachRemaining((BEvent e) -> {
+			acts.add(e.getEventName());
+			caseIds.add(e.getTraceName());
+		});
+		
+		assertEquals(5, acts.size());
+		assertEquals(5, caseIds.size());
+		
+		assertThat(acts, hasItems("a11","a21","a22","a12","a23"));
+		assertThat(caseIds, hasItems("c1","c2","c2","c1","c2"));
+	}
+
 //	@Test
 //	public void test_mqtt_1() {
 //		try {
@@ -158,24 +186,44 @@ public class SourcesTest {
 //			List<String> acts = new LinkedList<>();
 //			List<String> caseIds = new LinkedList<>();
 //			
+//			MQTTXesSource s = new MQTTXesSource("tcp://localhost:9999", "test", "name");
+//			
+//			new Thread(new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					try {
+//						Thread.sleep(5000);
+//						System.out.println("going...");
+//						MqttClient client = new MqttClient("tcp://localhost:9999", "clientid", new MemoryPersistence());
+//						client.connect();
+//						
+//						publish(client, "c1", "a11");
+//						publish(client, "c2", "a21");
+//						publish(client, "c2", "a22");
+//						publish(client, "c1", "a12");
+//						publish(client, "c2", "a23");
+//						s.cancel();
+//						
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					} catch (MqttException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}).start();
+//			
 //			// create actual source
-//			MQTTXesSource source = new MQTTXesSource("tcp://localhost:9999", "test", "name");
-//			source.prepare();
-//			source.getObservable().subscribe((t) -> {
-//				acts.add(EventUtils.getActivityName(t));
-//				caseIds.add(EventUtils.getCaseId(t));
+//			StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+//			DataStream<BEvent> stream = env.addSource(s);
+//			
+//			stream.executeAndCollect().forEachRemaining((BEvent e) -> {
+//				System.out.println(e);
+//				acts.add(e.getEventName());
+//				caseIds.add(e.getTraceName());
 //			});
-//
-//			MqttClient client = new MqttClient("tcp://localhost:9999", "clientid", new MemoryPersistence());
-//			client.connect();
 //			
-//			publish(client, "c1", "a11");
-//			publish(client, "c2", "a21");
-//			publish(client, "c2", "a22");
-//			publish(client, "c1", "a12");
-//			publish(client, "c2", "a23");
-//			
-//			Thread.sleep(100);
+//			System.out.println("3");
 //			
 //			assertThat(acts, hasItems("a11","a21","a22","a12","a23"));
 //			assertThat(caseIds, hasItems("c1","c2","c2","c1","c2"));
@@ -184,13 +232,13 @@ public class SourcesTest {
 //			e.printStackTrace();
 //		}
 //	}
-//	
+	
 //	@Test
 //	public void test_mqtt_2() {
 //		MQTTXesSource source = new MQTTXesSource("tcp://localhost:1", "test", "name");
 //		assertThrowsExactly(SourceException.class, () -> source.prepare());
 //	}
-//	
+	
 //	protected void publish(MqttClient client, String caseId, String activityName) throws MqttPersistenceException, MqttException {
 //		client.publish("test/name/" + caseId + "/" + activityName, "{}".getBytes(StandardCharsets.UTF_8), 1, false);
 //	}

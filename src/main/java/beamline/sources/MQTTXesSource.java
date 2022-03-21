@@ -37,7 +37,6 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 	private String processName;
 	private String brokerHost;
 	private String topicBase;
-	private transient IMqttClient myClient;
 	
 	/**
 	 * Constructs the source
@@ -58,7 +57,8 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 		MqttConnectOptions options = new MqttConnectOptions();
 		options.setCleanSession(true);
 		options.setKeepAliveInterval(30);
-
+		
+		IMqttClient myClient = null;
 		try {
 			myClient = new MqttClient(brokerHost, UUID.randomUUID().toString());
 			myClient.setCallback(new MqttCallback() {
@@ -90,23 +90,32 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 		}
 		
 		while(isRunning()) {
-			while (buffer.isEmpty()) {
+			while (isRunning() && buffer.isEmpty()) {
+				System.out.println("sleeping " + isRunning());
 				Thread.sleep(100l);
 			}
-			ctx.collect(buffer.poll());
+			if (isRunning()) {
+				synchronized (ctx.getCheckpointLock()) {
+					ctx.collect(buffer.poll());
+				}
+			}
 		}
-	}
-	
-	@Override
-	public void cancel() {
-		super.cancel();
-		if (myClient != null && myClient.isConnected()) {
+		System.out.println("aaa");
+		
+		if (!isRunning() && myClient.isConnected()) {
 			try {
 				myClient.disconnect();
 			} catch (MqttException e) {
 				// nothing to do here
 			}
 		}
+		System.err.println("done");
 	}
-
+	
+	@Override
+	public void cancel() {
+		// TODO Auto-generated method stub
+		super.cancel();
+		System.out.println("closing");
+	}
 }

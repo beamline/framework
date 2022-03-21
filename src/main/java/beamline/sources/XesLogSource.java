@@ -1,6 +1,8 @@
 package beamline.sources;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,6 +20,7 @@ import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
+import org.deckfour.xes.out.XesXmlGZIPSerializer;
 
 import beamline.events.BEvent;
 import beamline.exceptions.EventException;
@@ -35,7 +38,6 @@ public class XesLogSource extends BeamlineAbstractSource {
 	private static final long serialVersionUID = 1095855454671335981L;
 
 	private String fileName;
-	private transient XLog log;
 	private List<BEvent> events;
 	
 	/**
@@ -54,18 +56,18 @@ public class XesLogSource extends BeamlineAbstractSource {
 	 * Constructs a source from the given log
 	 * 
 	 * @param log the log to use as source
+	 * @throws IOException 
 	 */
-	public XesLogSource(XLog log) {
-		this.log = log;
+	public XesLogSource(XLog log) throws IOException {
+		File tmpFile = File.createTempFile("file", ".xes.gz");
+		new XesXmlGZIPSerializer().serialize(log, new FileOutputStream(tmpFile));
+		this.fileName = tmpFile.getAbsolutePath();
 	}
 	
 	@Override
 	public void run(SourceContext<BEvent> ctx) throws Exception {
-		if (log == null) {
-			parseLog(fileName);
-		}
 		if (events == null) {
-			prepareStream();
+			prepareStream(parseLog(fileName));
 		}
 		Iterator<BEvent> i = events.iterator();
 		while(i.hasNext() && isRunning()) {
@@ -82,7 +84,7 @@ public class XesLogSource extends BeamlineAbstractSource {
 		}
 	}
 	
-	private void parseLog(String fileName) throws SourceException {
+	private XLog parseLog(String fileName) throws SourceException {
 		XParser[] parsers = new XParser[] {
 				new XesXmlGZIPParser(),
 				new XesXmlParser(),
@@ -92,17 +94,16 @@ public class XesLogSource extends BeamlineAbstractSource {
 		for (XParser p : parsers) {
 			if (p.canParse(file)) {
 				try {
-					log = p.parse(file).get(0);
+					return p.parse(file).get(0);
 				} catch (Exception e) {
 					throw new SourceException(e.getMessage());
 				}
-				return;
 			}
 		}
 		throw new SourceException("XES file format not supported");
 	}
 	
-	private void prepareStream() throws SourceException, EventException {
+	private void prepareStream(XLog log) throws SourceException, EventException {
 		if (log.isEmpty()) {
 			throw new SourceException("The given log is empty");
 		}

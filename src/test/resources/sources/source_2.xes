@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log xes.version="1849.2016" xmlns="http://www.xes-standard.org" xes.creator="Fluxicon Disco">
+	<extension name="Concept" prefix="concept" uri="http://www.xes-standard.org/concept.xesext"/>
+	<extension name="Lifecycle" prefix="lifecycle" uri="http://www.xes-standard.org/lifecycle.xesext"/>
+	<global scope="trace">
+		<string key="concept:name" value="name"/>
+		<string key="variant" value="string"/>
+		<int key="variant-index" value="0"/>
+	</global>
+	<global scope="event">
+		<string key="concept:name" value="name"/>
+		<string key="lifecycle:transition" value="transition"/>
+		<string key="act" value="string"/>
+	</global>
+	<classifier name="Activity" keys="act"/>
+	<string key="lifecycle:model" value="standard"/>
+	<string key="creator" value="Fluxicon Disco"/>
+	<string key="library" value="Fluxicon Octane"/>
+	<trace>
+		<string key="concept:name" value="c1"/>
+		<string key="variant" value="Variant 1"/>
+		<int key="variant-index" value="1"/>
+		<string key="creator" value="Fluxicon Disco"/>
+		<event>
+			<string key="concept:name" value="a11"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="act" value="a11"/>
+		</event>
+		<event>
+			<string key="concept:name" value="a12"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="act" value="a12"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="c2"/>
+		<string key="variant" value="Variant 2"/>
+		<int key="variant-index" value="2"/>
+		<string key="creator" value="Fluxicon Disco"/>
+		<event>
+			<string key="concept:name" value="a21"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="act" value="a21"/>
+		</event>
+		<event>
+			<string key="concept:name" value="a22"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="act" value="a22"/>
+		</event>
+		<event>
+			<string key="concept:name" value="a23"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="act" value="a23"/>
+		</event>
+	</trace>
+</log>

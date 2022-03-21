@@ -26,6 +26,6 @@ public abstract class BeamlineAbstractSource extends RichSourceFunction<BEvent> 
 	
 	@Override
 	public void cancel() {
-		running = false;
+		this.running = false;
 	}
 }
