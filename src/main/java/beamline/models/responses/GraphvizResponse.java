@@ -8,7 +8,9 @@ import beamline.graphviz.Dot;
  * 
  * @author Andrea Burattin
  */
-public interface GraphvizResponse extends Response {
+public abstract class GraphvizResponse extends Response {
+
+	private static final long serialVersionUID = 7232727657074096321L;
 
 	/**
 	 * Returns the Dot representation of the response
