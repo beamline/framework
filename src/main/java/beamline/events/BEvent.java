@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
@@ -197,6 +199,36 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 			return 0;
 		}
 		return getEventTime().compareTo(o.getEventTime());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		BEvent other = (BEvent) obj;
+		return new EqualsBuilder()
+				.appendSuper(super.equals(obj))
+				.append(logAttributes, other.logAttributes)
+				.append(traceAttributes, other.traceAttributes)
+				.append(eventAttributes, other.eventAttributes)
+				.isEquals();
+
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37)
+				.append(logAttributes)
+				.append(traceAttributes)
+				.append(eventAttributes)
+				.toHashCode();
 	}
 	
 	//

@@ -14,7 +14,7 @@ import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 
 import beamline.events.BEvent;
 import beamline.exceptions.EventException;
-import beamline.mappers.DirectlyFollowsRelation;
+import beamline.models.responses.DirectlyFollowsRelation;
 
 public class Utils {
 
@@ -81,8 +81,8 @@ public class Utils {
 	}
 
 	public static boolean verifyDirectFollows(DirectlyFollowsRelation df, String a1, String a2, String caseId) {
-		String df_a1 = XConceptExtension.instance().extractName(df.getFirst());
-		String df_a2 = XConceptExtension.instance().extractName(df.getSecond());
+		String df_a1 = df.getFrom().getEventName();
+		String df_a2 = df.getTo().getEventName();
 		return df_a1.equals(a1) && df_a2.equals(a2) && df.getCaseId().equals(caseId);
 	}
 }

@@ -5,7 +5,9 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
+import java.io.File;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,12 +16,21 @@ import java.util.List;
 
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.broker.TransportConnector;
+import org.apache.commons.lang3.CharSet;
+import org.apache.flink.api.common.serialization.SimpleStringEncoder;
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.client.JobExecutionException;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamUtils;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink;
+import org.apache.flink.streaming.api.operators.StreamSink;
 import org.apache.flink.streaming.experimental.CollectSink;
+import org.apache.flink.util.CloseableIterator;
 import org.apache.flink.util.Collector;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -27,6 +38,7 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.junit.jupiter.api.Test;
 
+import com.google.common.io.Files;
 import com.opencsv.CSVParserBuilder;
 
 import beamline.events.BEvent;
@@ -183,62 +195,80 @@ public class SourcesTest {
 //			brokerService.start();
 //			brokerService.waitUntilStarted();
 //			
-//			List<String> acts = new LinkedList<>();
+//			final List<String> acts = new LinkedList<>();
 //			List<String> caseIds = new LinkedList<>();
 //			
 //			MQTTXesSource s = new MQTTXesSource("tcp://localhost:9999", "test", "name");
 //			
-//			new Thread(new Runnable() {
-//				
-//				@Override
-//				public void run() {
-//					try {
-//						Thread.sleep(5000);
-//						System.out.println("going...");
-//						MqttClient client = new MqttClient("tcp://localhost:9999", "clientid", new MemoryPersistence());
-//						client.connect();
-//						
-//						publish(client, "c1", "a11");
-//						publish(client, "c2", "a21");
-//						publish(client, "c2", "a22");
-//						publish(client, "c1", "a12");
-//						publish(client, "c2", "a23");
-//						s.cancel();
-//						
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					} catch (MqttException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}).start();
+//			// create the sink
+//			File tmpFile = File.createTempFile("mqtt", "log");
+//			StreamingFileSink<BEvent> sink = StreamingFileSink.forRowFormat(Path.fromLocalFile(tmpFile), new SimpleStringEncoder<BEvent>()).build();
+////			val sink: StreamingFileSink[String] = StreamingFileSink
+////					  .forRowFormat(new Path(outPath), new SimpleStringEncoder[String]("UTF-8"))
+////					  .build()
+//
 //			
 //			// create actual source
 //			StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 //			DataStream<BEvent> stream = env.addSource(s);
+//			stream.addSink(sink);
+//			JobClient job = env.executeAsync();
 //			
-//			stream.executeAndCollect().forEachRemaining((BEvent e) -> {
-//				System.out.println(e);
-//				acts.add(e.getEventName());
-//				caseIds.add(e.getTraceName());
-//			});
+////			Thread.sleep(1000);
 //			
-//			System.out.println("3");
+//			System.out.println(tmpFile);
 //			
-//			assertThat(acts, hasItems("a11","a21","a22","a12","a23"));
-//			assertThat(caseIds, hasItems("c1","c2","c2","c1","c2"));
+//			System.out.println("going");
+//			MqttClient client = new MqttClient("tcp://localhost:9999", "clientid", new MemoryPersistence());
+//			client.connect();
+//			publish(client, "c1", "a11");
+//			publish(client, "c2", "a21");
+//			publish(client, "c2", "a22");
+//			publish(client, "c1", "a12");
+//			publish(client, "c2", "a23");
+//			
+//			Thread.sleep(1000);
+////			job.cancel();
+//			System.out.println(job.getJobStatus().isDone());
+//			
+//			System.out.println(Files.readLines(tmpFile, Charset.defaultCharset()));
+////			System.out.println("final " + acts);
+////			
+////			
+////			
+////			System.out.println("post-final " + acts);
+////			
+//////			System.out.println("1");
+////			stream.executeAndCollect().forEachRemaining((BEvent e) -> {
+////				System.out.println(e);
+////				acts.add(e.getEventName());
+////				caseIds.add(e.getTraceName());
+////			});
+////			JobClient job = env.executeAsync();
+////
+////			Thread.sleep(1000);
+////			job.cancel();
+////			
+////			Thread.sleep(1000);
+//			
+////			assertThat(acts, hasItems("a11","a21","a22","a12","a23"));
+////			assertThat(caseIds, hasItems("c1","c2","c2","c1","c2"));
+////			
+////			System.out.println("3");
+//			
+//			
 //			
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
 //	}
-	
-//	@Test
-//	public void test_mqtt_2() {
-//		MQTTXesSource source = new MQTTXesSource("tcp://localhost:1", "test", "name");
-//		assertThrowsExactly(SourceException.class, () -> source.prepare());
-//	}
-	
+//	
+////	@Test
+////	public void test_mqtt_2() {
+////		MQTTXesSource source = new MQTTXesSource("tcp://localhost:1", "test", "name");
+////		assertThrowsExactly(SourceException.class, () -> source.prepare());
+////	}
+//	
 //	protected void publish(MqttClient client, String caseId, String activityName) throws MqttPersistenceException, MqttException {
 //		client.publish("test/name/" + caseId + "/" + activityName, "{}".getBytes(StandardCharsets.UTF_8), 1, false);
 //	}

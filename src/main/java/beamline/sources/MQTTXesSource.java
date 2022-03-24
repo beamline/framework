@@ -50,7 +50,7 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 		this.topicBase = topicBase;
 		this.processName = processName;
 	}
-
+	
 	@Override
 	public void run(SourceContext<BEvent> ctx) throws Exception {
 		Queue<BEvent> buffer = new LinkedList<>();
@@ -91,7 +91,6 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 		
 		while(isRunning()) {
 			while (isRunning() && buffer.isEmpty()) {
-				System.out.println("sleeping " + isRunning());
 				Thread.sleep(100l);
 			}
 			if (isRunning()) {
@@ -100,7 +99,6 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 				}
 			}
 		}
-		System.out.println("aaa");
 		
 		if (!isRunning() && myClient.isConnected()) {
 			try {
@@ -109,13 +107,5 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 				// nothing to do here
 			}
 		}
-		System.err.println("done");
-	}
-	
-	@Override
-	public void cancel() {
-		// TODO Auto-generated method stub
-		super.cancel();
-		System.out.println("closing");
 	}
 }
