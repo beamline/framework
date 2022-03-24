@@ -95,7 +95,8 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 			}
 			if (isRunning()) {
 				synchronized (ctx.getCheckpointLock()) {
-					ctx.collect(buffer.poll());
+					BEvent e = buffer.poll();
+					ctx.collect(e);
 				}
 			}
 		}
