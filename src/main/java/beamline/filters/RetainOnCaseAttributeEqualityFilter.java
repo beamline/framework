@@ -1,14 +1,13 @@
 package beamline.filters;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.XTrace;
+import org.apache.flink.api.common.functions.FilterFunction;
 
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.functions.Predicate;
+import beamline.events.BEvent;
 
 /**
  * This filter retains events based on the equality of a certain trace
@@ -20,8 +19,9 @@ import io.reactivex.rxjava3.functions.Predicate;
  *
  * @param <T> the type of the attribute
  */
-public class RetainOnCaseAttributeEqualityFilter<T extends XAttribute> implements Predicate<XTrace> {
+public class RetainOnCaseAttributeEqualityFilter<T extends Serializable> implements FilterFunction<BEvent> {
 
+	private static final long serialVersionUID = 1225284800265650317L;
 	private String attributeName;
 	private Set<T> attributeValues;
 	
@@ -38,8 +38,8 @@ public class RetainOnCaseAttributeEqualityFilter<T extends XAttribute> implement
 	}
 	
 	@Override
-	public boolean test(@NonNull XTrace t) throws Throwable {
-		return attributeValues.contains(t.getAttributes().get(attributeName));
+	public boolean filter(BEvent t) {
+		return attributeValues.contains(t.getTraceAttributes().get(attributeName));
 	}
 
 }

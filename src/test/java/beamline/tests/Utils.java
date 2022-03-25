@@ -6,12 +6,8 @@ import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryNaiveImpl;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 
-import beamline.exceptions.EventException;
-import beamline.mappers.DirectlyFollowsRelation;
-import beamline.utils.EventUtils;
-import io.reactivex.rxjava3.core.Observable;
+import beamline.models.responses.DirectlyFollowsRelation;
 
 public class Utils {
 
@@ -25,25 +21,25 @@ public class Utils {
 	 * - A
 	 * - C / trace attribute: (a1,v4)
 	 */
-	public static Observable<XTrace> generateObservableSameCaseId() {
-		XTrace[] events = null;
-		try {
-			events = new XTrace[] {
-				EventUtils.create("K", "c"),
-				EventUtils.create("A", "c"),
-				EventUtils.create("B", "c"),
-				EventUtils.create("A", "c"),
-				EventUtils.create("C", "c")
-			};
-		} catch (EventException e) {
-			e.printStackTrace();
-		}
-		events[1].getAttributes().put("a1", new XAttributeLiteralImpl("a1", "v1"));
-		events[2].get(0).getAttributes().put("a2", new XAttributeLiteralImpl("a2", "v3"));
-		events[3].get(0).getAttributes().put("a2", new XAttributeLiteralImpl("a2", "v2"));
-		events[4].getAttributes().put("a1", new XAttributeLiteralImpl("a1", "v4"));
-		return Observable.fromArray(events);
-	}
+//	public static Observable<XTrace> generateObservableSameCaseId() {
+//		XTrace[] events = null;
+//		try {
+//			events = new XTrace[] {
+//				EventUtils.create("K", "c"),
+//				EventUtils.create("A", "c"),
+//				EventUtils.create("B", "c"),
+//				EventUtils.create("A", "c"),
+//				EventUtils.create("C", "c")
+//			};
+//		} catch (EventException e) {
+//			e.printStackTrace();
+//		}
+//		events[1].getAttributes().put("a1", new XAttributeLiteralImpl("a1", "v1"));
+//		events[2].get(0).getAttributes().put("a2", new XAttributeLiteralImpl("a2", "v3"));
+//		events[3].get(0).getAttributes().put("a2", new XAttributeLiteralImpl("a2", "v2"));
+//		events[4].getAttributes().put("a1", new XAttributeLiteralImpl("a1", "v4"));
+//		return Observable.fromArray(events);
+//	}
 	
 	/*
 	 * c1: <K,A,B,A,C>
@@ -78,8 +74,8 @@ public class Utils {
 	}
 
 	public static boolean verifyDirectFollows(DirectlyFollowsRelation df, String a1, String a2, String caseId) {
-		String df_a1 = XConceptExtension.instance().extractName(df.getFirst());
-		String df_a2 = XConceptExtension.instance().extractName(df.getSecond());
+		String df_a1 = df.getFrom().getEventName();
+		String df_a2 = df.getTo().getEventName();
 		return df_a1.equals(a1) && df_a2.equals(a2) && df.getCaseId().equals(caseId);
 	}
 }

@@ -1,90 +1,61 @@
 package beamline.tests;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItems;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 import org.junit.jupiter.api.Test;
 
+import beamline.events.BEvent;
+import beamline.exceptions.EventException;
 import beamline.filters.ExcludeActivitiesFilter;
 import beamline.filters.ExcludeOnCaseAttributeEqualityFilter;
 import beamline.filters.RetainActivitiesFilter;
 import beamline.filters.RetainOnCaseAttributeEqualityFilter;
-import beamline.utils.EventUtils;
 
 public class FiltersTest {
 
 	@Test
-	public void test_exclude_activities_on_name_filter() {
-		List<String> results = new ArrayList<String>();
-		Utils.generateObservableSameCaseId()
-			.filter(new ExcludeActivitiesFilter("A"))
-			.subscribe((t) -> results.add(EventUtils.getActivityName(t)));
-		assertEquals(3, results.size());
-		assertThat(results, hasItems("K","B","C"));
+	public void test_exclude_activities_on_name_filter() throws EventException, Exception {
+		ExcludeActivitiesFilter f = new ExcludeActivitiesFilter("A");
+		
+		assertTrue(f.filter(BEvent.create("", "B", "")));
+		assertFalse(f.filter(BEvent.create("", "A", "")));
 	}
 	
 	@Test
-	public void test_retain_activities_on_name_filter() {
-		List<String> results = new ArrayList<String>();
-		Utils.generateObservableSameCaseId()
-			.filter(new RetainActivitiesFilter("A","B"))
-			.subscribe((t) -> results.add(EventUtils.getActivityName(t)));
-		assertEquals(3, results.size());
-		assertThat(results, hasItems("A","B","A"));
+	public void test_retain_activities_on_name_filter() throws EventException {
+		RetainActivitiesFilter f = new RetainActivitiesFilter("A");
+
+		assertTrue(f.filter(BEvent.create("", "A", "")));
+		assertFalse(f.filter(BEvent.create("", "B", "")));
 	}
 	
 	@Test
-	public void test_retain_activities_on_case_attribute_filter_1() {
-		List<String> results = new ArrayList<String>();
-		Utils.generateObservableSameCaseId()
-			.filter(new RetainOnCaseAttributeEqualityFilter<XAttributeLiteralImpl>(
-					"a1",
-					new XAttributeLiteralImpl("a1", "v1")))
-			.subscribe((t) -> results.add(EventUtils.getActivityName(t)));
-		assertEquals(1, results.size());
-		assertThat(results, hasItems("A"));
+	public void test_retain_activities_on_case_attribute_filter() throws EventException {
+		BEvent e1 = BEvent.create("", "", "");
+		BEvent e2 = BEvent.create("", "", "");
+		
+		e1.getTraceAttributes().put("a", "v1");
+		e2.getTraceAttributes().put("a", "v2");
+		
+		RetainOnCaseAttributeEqualityFilter<String> f = new RetainOnCaseAttributeEqualityFilter<String>("a", "v1");
+		
+		assertTrue(f.filter(e1));
+		assertFalse(f.filter(e2));
 	}
 	
 	@Test
-	public void test_retain_activities_on_case_attribute_filter_2() {
-		List<String> results = new ArrayList<String>();
-		Utils.generateObservableSameCaseId()
-			.filter(new RetainOnCaseAttributeEqualityFilter<XAttributeLiteralImpl>(
-					"a1",
-					new XAttributeLiteralImpl("a1", "v1"),
-					new XAttributeLiteralImpl("a1", "v4")))
-			.subscribe((t) -> results.add(EventUtils.getActivityName(t)));
-		assertEquals(2, results.size());
-		assertThat(results, hasItems("A","C"));
+	public void test_exclude_activities_on_case_attribute_filter() throws EventException {
+		BEvent e1 = BEvent.create("", "", "");
+		BEvent e2 = BEvent.create("", "", "");
+		
+		e1.getTraceAttributes().put("a", "v1");
+		e2.getTraceAttributes().put("a", "v2");
+		
+		ExcludeOnCaseAttributeEqualityFilter<String> f = new ExcludeOnCaseAttributeEqualityFilter<String>("a", "v1");
+		
+		assertFalse(f.filter(e1));
+		assertTrue(f.filter(e2));
 	}
 	
-	@Test
-	public void test_exclude_activities_on_case_attribute_filter_1() {
-		List<String> results = new ArrayList<String>();
-		Utils.generateObservableSameCaseId()
-			.filter(new ExcludeOnCaseAttributeEqualityFilter<XAttributeLiteralImpl>(
-					"a1",
-					new XAttributeLiteralImpl("a1", "v1")))
-			.subscribe((t) -> results.add(EventUtils.getActivityName(t)));
-		assertEquals(4, results.size());
-		assertThat(results, hasItems("K","B","A","C"));
-	}
-	
-	@Test
-	public void test_exclude_activities_on_case_attribute_filter_2() {
-		List<String> results = new ArrayList<String>();
-		Utils.generateObservableSameCaseId()
-			.filter(new ExcludeOnCaseAttributeEqualityFilter<XAttributeLiteralImpl>(
-					"a1",
-					new XAttributeLiteralImpl("a1", "v1"),
-					new XAttributeLiteralImpl("a1", "v4")))
-			.subscribe((t) -> results.add(EventUtils.getActivityName(t)));
-		assertEquals(3, results.size());
-		assertThat(results, hasItems("K","B","A"));
-	}
 }
