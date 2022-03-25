@@ -22,7 +22,7 @@ public class AlgorithmTest {
 			private static final long serialVersionUID = -8445717838576941924L;
 
 			@Override
-			public StringResponse ingest(BEvent event) throws Exception {
+			public StringResponse ingest(BEvent event) {
 				return new StringResponse(event.getProcessName() + event.getEventName() + event.getTraceName());
 			}
 		};
@@ -51,7 +51,7 @@ public class AlgorithmTest {
 			private static final long serialVersionUID = -8445717838576941924L;
 
 			@Override
-			public StringResponse ingest(BEvent event) throws Exception {
+			public StringResponse ingest(BEvent event) {
 				return new StringResponse(event.getProcessName() + event.getEventName() + event.getTraceName());
 			}
 		};

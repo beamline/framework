@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -22,9 +22,9 @@ public class ResponsesTest {
 	public void response_tests() {
 		Response r = new Response();
 		
-		Date now = new Date();
-		r.setProcessedEvents(now.getTime());
-		assertEquals(now, r.getProcessedEvents());
+		long rand = new Random().nextLong();
+		r.setProcessedEvents(rand);
+		assertEquals(rand, r.getProcessedEvents());
 	}
 	
 	@Test

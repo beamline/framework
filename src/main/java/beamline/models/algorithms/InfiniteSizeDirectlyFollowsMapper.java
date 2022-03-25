@@ -26,7 +26,7 @@ public class InfiniteSizeDirectlyFollowsMapper extends StreamMiningAlgorithm<Dir
 	private Map<String, BEvent> map = new HashMap<>();
 
 	@Override
-	public DirectlyFollowsRelation ingest(BEvent event) throws Exception {
+	public DirectlyFollowsRelation ingest(BEvent event) {
 		String caseId = event.getTraceName();
 		DirectlyFollowsRelation toRet = null;
 		

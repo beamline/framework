@@ -4,12 +4,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.extension.std.XTimeExtension;
 import org.deckfour.xes.in.XMxmlGZIPParser;
@@ -61,9 +67,9 @@ public class XesLogSource extends BeamlineAbstractSource {
 	 * is created
 	 */
 	public XesLogSource(XLog log) throws IOException {
-		File tmpFile = Files.createTempFile("file", ".xes.gz").toFile();
-		new XesXmlGZIPSerializer().serialize(log, new FileOutputStream(tmpFile));
-		this.fileName = tmpFile.getAbsolutePath();
+		Path tmpFile = getTempFile();
+		new XesXmlGZIPSerializer().serialize(log, new FileOutputStream(tmpFile.toFile()));
+		this.fileName = tmpFile.toFile().getAbsolutePath();
 	}
 	
 	@Override
@@ -147,5 +153,20 @@ public class XesLogSource extends BeamlineAbstractSource {
 		
 		// sort events
 		Collections.sort(events);
+	}
+	
+	private Path getTempFile() throws IOException {
+		Path p = null;
+		if (SystemUtils.IS_OS_UNIX) {
+			FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
+			p = Files.createTempFile("log", ".xes.gz", attr); // Compliant
+		} else {
+			File f = Files.createTempFile("log", ".xes.gz").toFile(); // Compliant
+			f.setReadable(true, true);
+			f.setWritable(true, true);
+			f.setExecutable(true, true);
+			p = f.toPath();
+		}
+		return p;
 	}
 }

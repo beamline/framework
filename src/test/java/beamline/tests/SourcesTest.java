@@ -212,12 +212,10 @@ public class SourcesTest {
 						java.nio.file.Files.write(tmpFile.toPath(), toWrite.getBytes(), StandardOpenOption.APPEND);
 					}
 				});
-//			JobClient job = env.executeAsync();
 			env.executeAsync();
 			
 			Thread.sleep(2000);
 			
-			System.out.println("going");
 			MqttClient client = new MqttClient("tcp://localhost:9999", "clientid", new MemoryPersistence());
 			client.connect();
 			publish(client, "c1", "a11");
@@ -227,8 +225,6 @@ public class SourcesTest {
 			publish(client, "c2", "a23");
 			
 			Thread.sleep(2000);
-//			job.cancel();
-			System.out.println("Done");
 			assertEquals(
 					"name-c1-a11/name-c2-a21/name-c2-a22/name-c1-a12/name-c2-a23/",
 					org.apache.commons.io.FileUtils.readFileToString(tmpFile, "utf-8"));

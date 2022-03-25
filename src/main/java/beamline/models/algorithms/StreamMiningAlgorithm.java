@@ -44,10 +44,8 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 	 * 
 	 * @param event the new event being observed
 	 * @return the result of the mining of the event
-	 * @throws Exception general exception that can occur with the ingestion of
-	 * the event
 	 */
-	public abstract T ingest(BEvent event) throws Exception;
+	public abstract T ingest(BEvent event);
 	
 	/**
 	 * Returns the total number of events processed so far
