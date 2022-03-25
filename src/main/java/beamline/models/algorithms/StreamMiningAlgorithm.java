@@ -44,7 +44,8 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 	 * 
 	 * @param event the new event being observed
 	 * @return the result of the mining of the event
-	 * @throws Exception 
+	 * @throws Exception general exception that can occur with the ingestion of
+	 * the event
 	 */
 	public abstract T ingest(BEvent event) throws Exception;
 	
@@ -60,7 +61,7 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 			}
 			return processedEvents.value().longValue();
 		} catch (IOException e) {
-			e.printStackTrace();
+			// this exception would mean that there are serialization issues
 		}
 		return -1;
 	}
@@ -78,7 +79,7 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 			}
 			processedEvents.update(value);
 		} catch (IOException e) {
-			e.printStackTrace();
+			// this exception would mean that there are serialization issues
 		}
 		T tmp = ingest(event);
 		if (tmp != null) {

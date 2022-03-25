@@ -32,7 +32,10 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	private Map<String, Serializable> eventAttributes;
 	private Map<String, Serializable> traceAttributes;
 	private Map<String, Serializable> logAttributes;
-	
+
+	/**
+	 * Constructor of a new event
+	 */
 	public BEvent() {
 		this.eventAttributes = new HashMap<>();
 		this.traceAttributes = new HashMap<>();
@@ -43,8 +46,9 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	// Factories
 	//
 	/**
-	 * Creates a new {@link XTrace} referring to one event
-	 * 
+	 * Creates a new {@link BEvent} referring to one event
+	 *
+	 * @param processName the name of the process
 	 * @param activityName the name of the activity
 	 * @param caseId the identifier of the process instance
 	 * @param time the time when the event has happened
@@ -82,8 +86,9 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	}
 	
 	/**
-	 * Creates a new {@link XTrace} referring to one event
+	 * Creates a new {@link BEvent} referring to one event
 	 * 
+	 * @param processName the name of the process
 	 * @param activityName the name of the activity
 	 * @param caseId the identifier of the process instance
 	 * @param time the time when the event has happened
@@ -99,6 +104,7 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	 * Creates a new {@link XTrace} referring to one event. The time of the
 	 * event is set to the current time
 	 * 
+	 * @param processName the name of the process
 	 * @param activityName the name of the activity
 	 * @param caseId the identifier of the process instance
 	 * @return the new event

@@ -27,9 +27,9 @@ import beamline.exceptions.EventException;
 import beamline.exceptions.SourceException;
 
 /**
- * This implementation of a {@link BeamlineAbstractSource} produces events according to
- * the events contained in an {@link XLog}. The events are first sorted
- * according to their timestamp and then sent.
+ * This implementation of a {@link BeamlineAbstractSource} produces events
+ * according to the events contained in an {@link XLog}. The events are first
+ * sorted according to their timestamp and then sent.
  * 
  * @author Andrea Burattin
  */
@@ -45,8 +45,8 @@ public class XesLogSource extends BeamlineAbstractSource {
 	 * 
 	 * @param fileName the file containing the log to use. The file can be
 	 * either a file parsed by {@link XesXmlGZIPParser} or {@link XesXmlParser}
-	 * (i.e., extensions <code>.xes.gz</code> or <code>.xes</code>). If the file
-	 * is none of these, then {@link #prepare()} will throw an exception.
+	 * (i.e., extensions <code>.xes.gz</code> or <code>.xes</code>) or any other
+	 * parser currently supported by the OpenXES library.
 	 */
 	public XesLogSource(String fileName) {
 		this.fileName = fileName;
@@ -56,7 +56,8 @@ public class XesLogSource extends BeamlineAbstractSource {
 	 * Constructs a source from the given log
 	 * 
 	 * @param log the log to use as source
-	 * @throws IOException 
+	 * @throws IOException an exception that might occur when a temporary file
+	 * is created
 	 */
 	public XesLogSource(XLog log) throws IOException {
 		File tmpFile = File.createTempFile("file", ".xes.gz");

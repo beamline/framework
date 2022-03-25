@@ -21,9 +21,8 @@ public class DirectlyFollowsRelation extends Response {
 	/**
 	 * Constructor
 	 * 
-	 * @param caseId the case id
-	 * @param first the first event
-	 * @param second the second event
+	 * @param from the first event
+	 * @param to the second event
 	 */
 	public DirectlyFollowsRelation(BEvent from, BEvent to) {
 		if (!from.getTraceName().equals(to.getTraceName())) {

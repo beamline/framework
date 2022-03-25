@@ -1,13 +1,13 @@
 package beamline.sources;
 
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
 
 import beamline.events.BEvent;
 
 /**
- * This interface is supposed just to bind the type of {@link SourceFunction} to
- * {@link BEvent}.
+ * This interface is supposed to bind the type of {@link RichSourceFunction} to
+ * {@link BEvent} and to provide minimal infrastructure to check if the sourece
+ * is currently running.
  * 
  * @author Andrea Burattin
  */
@@ -17,8 +17,9 @@ public abstract class BeamlineAbstractSource extends RichSourceFunction<BEvent> 
 	private boolean running = true;
 	
 	/**
-	 * 
-	 * @return
+	 * Returns if the source is still generting events
+	 *
+	 * @return whether the current source is still running or not
 	 */
 	public boolean isRunning() {
 		return running;

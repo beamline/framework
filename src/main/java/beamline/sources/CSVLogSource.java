@@ -97,7 +97,8 @@ public class CSVLogSource extends BeamlineAbstractSource {
 	}
 	
 	/**
-	 * 
+	 * This class is used to configure the parser of the CSV
+	 *
 	 * @author Andrea Burattin
 	 */
 	public static class ParserConfiguration implements Serializable {
@@ -106,9 +107,10 @@ public class CSVLogSource extends BeamlineAbstractSource {
 		char separator = ICSVParser.DEFAULT_SEPARATOR;
 		
 		/**
-		 * 
-		 * @param separator
-		 * @return
+		 * Configures the fields separator
+		 *
+		 * @param separator the separator for the lines' fields
+		 * @return the parser configuration object
 		 */
 		public ParserConfiguration withSeparator(char separator) {
 			this.separator = separator;
