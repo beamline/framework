@@ -159,12 +159,16 @@ public class XesLogSource extends BeamlineAbstractSource {
 		Path p = null;
 		if (SystemUtils.IS_OS_UNIX) {
 			FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
-			p = Files.createTempFile("log", ".xes.gz", attr); // Compliant
+			p = Files.createTempFile("log", ".xes.gz", attr);
 		} else {
-			File f = Files.createTempFile("log", ".xes.gz").toFile(); // Compliant
-			f.setReadable(true, true);
-			f.setWritable(true, true);
-			f.setExecutable(true, true);
+			File f = Files.createTempFile("log", ".xes.gz").toFile();
+			boolean configured =
+					f.setReadable(true, true) &&
+					f.setWritable(true, true) &&
+					f.setExecutable(true, true);
+			if (!configured) {
+				// potential issue with unable to configure all flags
+			}
 			p = f.toPath();
 		}
 		return p;

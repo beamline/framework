@@ -69,7 +69,7 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 	 * The internal processor in charge of updating the internal status of the
 	 * map.
 	 */
-	protected T process(BEvent event) throws Exception {
+	protected T process(BEvent event) {
 		try {
 			long value = 1;
 			if (processedEvents.value() != null) {
