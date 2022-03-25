@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"beamline.exceptions"},{"l":"beamline.filters"},{"l":"beamline.mappers"},{"l":"beamline.models.algorithms"},{"l":"beamline.models.responses"},{"l":"beamline.sources"},{"l":"beamline.utils"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"beamline.events"},{"l":"beamline.exceptions"},{"l":"beamline.filters"},{"l":"beamline.models.algorithms"},{"l":"beamline.models.responses"},{"l":"beamline.sources"}]
