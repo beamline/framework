@@ -26,17 +26,32 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.junit.jupiter.api.Test;
 
 import beamline.events.BEvent;
-import beamline.sources.CSVXesLogSource;
+import beamline.sources.CSVLogSource;
 import beamline.sources.MQTTXesSource;
+import beamline.sources.StringTestSource;
 import beamline.sources.XesLogSource;
 
 public class SourcesTest {
 
 	@Test
+	public void test_string_test_source() throws Exception {
+		List<String> acts = new LinkedList<>();
+		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+		DataStream<BEvent> stream = env.addSource(new StringTestSource("ABCDA"));
+		stream.executeAndCollect().forEachRemaining((BEvent e) -> {
+			acts.add(e.getEventName());
+		});
+		
+		assertEquals(5, acts.size());
+		
+		assertThat(acts, hasItems("A","B","C","D","A"));
+	}
+	
+	@Test
 	public void test_csv_source_1() throws Exception {
 		List<String> acts = new LinkedList<>();
 		List<String> caseIds = new LinkedList<>();
-		CSVXesLogSource source = new CSVXesLogSource("src/test/resources/sources/source.csv", 0, 1);
+		CSVLogSource source = new CSVLogSource("src/test/resources/sources/source.csv", 0, 1);
 
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		DataStream<BEvent> stream = env.addSource(source);
@@ -56,11 +71,11 @@ public class SourcesTest {
 	public void test_csv_source_2() throws Exception {
 		List<String> acts = new LinkedList<>();
 		List<String> caseIds = new LinkedList<>();
-		CSVXesLogSource source = new CSVXesLogSource(
+		CSVLogSource source = new CSVLogSource(
 				"src/test/resources/sources/source_2.csv",
 				0,
 				1,
-				new CSVXesLogSource.ParserConfiguration().withSeparator('|'));
+				new CSVLogSource.ParserConfiguration().withSeparator('|'));
 		
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		DataStream<BEvent> stream = env.addSource(source);
@@ -78,7 +93,7 @@ public class SourcesTest {
 	
 	@Test
 	public void test_csv_source_3() {
-		CSVXesLogSource source = new CSVXesLogSource("DOESNT_EXIST", 0, 1);
+		CSVLogSource source = new CSVLogSource("DOESNT_EXIST", 0, 1);
 		assertThrowsExactly(JobExecutionException.class, () -> {
 			StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 			env.addSource(source).map(e -> e).print();
