@@ -1,10 +1,9 @@
 package beamline.tests;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 import java.util.UUID;
@@ -48,13 +47,21 @@ public class ResponsesTest {
 		assertEquals(df, df2);
 		assertNotEquals(df, df3);
 		assertNotEquals(null, df);
-		assertNotEquals("-", df);
-		assertEquals(df, df);
-		
-		assertTrue(df.hashCode() == df2.hashCode());
-		assertFalse(df.hashCode() == df3.hashCode());
 		
 		assertEquals("c1", df.getCaseId());
+	}
+	
+	@Test
+	public void test_equals() throws EventException {
+		BEvent e21 = BEvent.create("p", "a", "c1");
+		BEvent e22 = BEvent.create("p", "b", "c1");
+		BEvent e23 = BEvent.create("p", "a", "c2");
+		BEvent e24 = BEvent.create("p", "b", "c2");
+		
+		DirectlyFollowsRelation df = new DirectlyFollowsRelation(e21, e22);
+		DirectlyFollowsRelation df2 = new DirectlyFollowsRelation(e23, e24);
+		
+		assertThat(df).isEqualTo(df).hasSameHashCodeAs(df2);
 	}
 	
 	@Test
