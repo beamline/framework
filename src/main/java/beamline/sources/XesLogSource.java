@@ -3,6 +3,7 @@ package beamline.sources;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -60,7 +61,7 @@ public class XesLogSource extends BeamlineAbstractSource {
 	 * is created
 	 */
 	public XesLogSource(XLog log) throws IOException {
-		File tmpFile = File.createTempFile("file", ".xes.gz");
+		File tmpFile = Files.createTempFile("file", ".xes.gz").toFile();
 		new XesXmlGZIPSerializer().serialize(log, new FileOutputStream(tmpFile));
 		this.fileName = tmpFile.getAbsolutePath();
 	}
@@ -113,9 +114,6 @@ public class XesLogSource extends BeamlineAbstractSource {
 		String processName = XConceptExtension.instance().extractName(log);
 		if (processName == null) {
 			processName = "unnamed-xes-process";
-			if (fileName != null) {
-				processName = fileName;
-			}
 		}
 		
 		// populate all events
