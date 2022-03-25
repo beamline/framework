@@ -71,9 +71,8 @@ public class DirectlyFollowsRelation extends Response {
 		}
 		DirectlyFollowsRelation other = (DirectlyFollowsRelation) obj;
 		return new EqualsBuilder()
-				.appendSuper(super.equals(obj))
-				.append(getFrom(), other.getFrom())
-				.append(getTo(), other.getTo())
+				.append(getFrom().getEventName(), other.getFrom().getEventName())
+				.append(getTo().getEventName(), other.getTo().getEventName())
 				.isEquals();
 
 	}
@@ -81,8 +80,8 @@ public class DirectlyFollowsRelation extends Response {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
-				.append(getFrom())
-				.append(getTo())
+				.append(getFrom().getEventName())
+				.append(getTo().getEventName())
 				.toHashCode();
 	}
 }
