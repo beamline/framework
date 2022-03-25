@@ -26,7 +26,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.junit.jupiter.api.Test;
 
 import beamline.events.BEvent;
-import beamline.sources.CSVLogSource;
+import beamline.sources.CSVXesLogSource;
 import beamline.sources.MQTTXesSource;
 import beamline.sources.XesLogSource;
 
@@ -36,7 +36,7 @@ public class SourcesTest {
 	public void test_csv_source_1() throws Exception {
 		List<String> acts = new LinkedList<>();
 		List<String> caseIds = new LinkedList<>();
-		CSVLogSource source = new CSVLogSource("src/test/resources/sources/source.csv", 0, 1);
+		CSVXesLogSource source = new CSVXesLogSource("src/test/resources/sources/source.csv", 0, 1);
 
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		DataStream<BEvent> stream = env.addSource(source);
@@ -56,11 +56,11 @@ public class SourcesTest {
 	public void test_csv_source_2() throws Exception {
 		List<String> acts = new LinkedList<>();
 		List<String> caseIds = new LinkedList<>();
-		CSVLogSource source = new CSVLogSource(
+		CSVXesLogSource source = new CSVXesLogSource(
 				"src/test/resources/sources/source_2.csv",
 				0,
 				1,
-				new CSVLogSource.ParserConfiguration().withSeparator('|'));
+				new CSVXesLogSource.ParserConfiguration().withSeparator('|'));
 		
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		DataStream<BEvent> stream = env.addSource(source);
@@ -78,7 +78,7 @@ public class SourcesTest {
 	
 	@Test
 	public void test_csv_source_3() {
-		CSVLogSource source = new CSVLogSource("DOESNT_EXIST", 0, 1);
+		CSVXesLogSource source = new CSVXesLogSource("DOESNT_EXIST", 0, 1);
 		assertThrowsExactly(JobExecutionException.class, () -> {
 			StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 			env.addSource(source).map(e -> e).print();

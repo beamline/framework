@@ -25,10 +25,10 @@ import beamline.exceptions.SourceException;
  * 
  * @author Andrea Burattin
  */
-public class CSVLogSource extends BeamlineAbstractSource {
+public class CSVXesLogSource extends BeamlineAbstractSource {
 
 	private static final long serialVersionUID = 205574514393782145L;
-	private CSVLogSource.ParserConfiguration parserConfiguration;
+	private CSVXesLogSource.ParserConfiguration parserConfiguration;
 	private String filename;
 	private int caseIdColumn;
 	private int activityNameColumn;
@@ -44,7 +44,7 @@ public class CSVLogSource extends BeamlineAbstractSource {
 	 * @param parserConfiguration the parser configuration to be used for
 	 * parsing the CSV file
 	 */
-	public CSVLogSource(String filename, int caseIdColumn, int activityNameColumn, CSVLogSource.ParserConfiguration parserConfiguration) {
+	public CSVXesLogSource(String filename, int caseIdColumn, int activityNameColumn, CSVXesLogSource.ParserConfiguration parserConfiguration) {
 		this.filename = filename;
 		this.caseIdColumn = caseIdColumn;
 		this.activityNameColumn = activityNameColumn;
@@ -60,8 +60,8 @@ public class CSVLogSource extends BeamlineAbstractSource {
 	 * @param activityNameColumn the id of the column containing the activity
 	 * name (counting starts from 0)
 	 */
-	public CSVLogSource(String filename, int caseIdColumn, int activityNameColumn) {
-		this(filename, caseIdColumn, activityNameColumn, new CSVLogSource.ParserConfiguration());
+	public CSVXesLogSource(String filename, int caseIdColumn, int activityNameColumn) {
+		this(filename, caseIdColumn, activityNameColumn, new CSVXesLogSource.ParserConfiguration());
 	}
 	
 	@Override
