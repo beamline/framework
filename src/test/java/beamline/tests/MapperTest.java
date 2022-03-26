@@ -23,14 +23,14 @@ public class MapperTest {
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env
 			.fromElements(
-				BEvent.create("p", "c", "K"),
-				BEvent.create("p", "c2", "A"),
-				BEvent.create("p", "c", "A"),
-				BEvent.create("p", "c", "B"),
-				BEvent.create("p", "c2", "B"),
-				BEvent.create("p", "c", "A"),
-				BEvent.create("p", "c2", "A"),
-				BEvent.create("p", "c", "C"))
+				new BEvent("p", "c", "K"),
+				new BEvent("p", "c2", "A"),
+				new BEvent("p", "c", "A"),
+				new BEvent("p", "c", "B"),
+				new BEvent("p", "c2", "B"),
+				new BEvent("p", "c", "A"),
+				new BEvent("p", "c2", "A"),
+				new BEvent("p", "c", "C"))
 			.keyBy(BEvent::getProcessName)
 			.flatMap(new InfiniteSizeDirectlyFollowsMapper())
 			.executeAndCollect().forEachRemaining((DirectlyFollowsRelation e) -> {

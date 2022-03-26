@@ -69,7 +69,7 @@ public class MQTTXesSource extends BeamlineAbstractSource {
 					String partBeforeActName = topic.substring(0, posLastSlash);
 					String activityName = topic.substring(posLastSlash + 1);
 					String caseId = partBeforeActName.substring(partBeforeActName.lastIndexOf("/") + 1);
-					BEvent b = BEvent.create(processName, caseId, activityName);
+					BEvent b = new BEvent(processName, caseId, activityName);
 					buffer.add(b);
 				}
 				

@@ -28,32 +28,32 @@ public class EventTest {
 	
 	@Test
 	public void event_creation() throws EventException {
-		assertThrows(EventException.class, () -> BEvent.create("", "", null));
-		assertThrows(EventException.class, () -> BEvent.create("", null, ""));
-		assertThrows(EventException.class, () -> BEvent.create(null, "", ""));
+		assertThrows(EventException.class, () -> new BEvent("", "", null));
+		assertThrows(EventException.class, () -> new BEvent("", null, ""));
+		assertThrows(EventException.class, () -> new BEvent(null, "", ""));
 		
-		BEvent e = BEvent.create(processName, traceName, eventName, eventDate, Set.of(Pair.of("a1", "v1")));
+		BEvent e = new BEvent(processName, traceName, eventName, eventDate, Set.of(Pair.of("a1", "v1")));
 		assertEquals("v1", e.getEventAttributes().get("a1"));
 	}
 	
 	@Test
 	public void event_names() throws EventException {
-		BEvent e = BEvent.create(processName, traceName, eventName);
+		BEvent e = new BEvent(processName, traceName, eventName);
 		assertEquals(processName, e.getProcessName());
 		assertEquals(traceName, e.getTraceName());
 		assertEquals(eventName, e.getEventName());
 		
 		Date eventDate = new Date();
-		BEvent e2 = BEvent.create(processName, traceName, eventName, eventDate);
+		BEvent e2 = new BEvent(processName, traceName, eventName, eventDate);
 		assertEquals(eventDate, e2.getEventTime());
 	}
 	
 	@Test
 	public void test_equals() throws EventException {
-		BEvent e = BEvent.create(processName, traceName, eventName);
+		BEvent e = new BEvent(processName, traceName, eventName);
 		e.setTimestamp(null);
-		BEvent e2 = BEvent.create(processName, traceName, eventName, eventDate);
-		BEvent e3 = BEvent.create(processName, traceName, eventName, eventDate);
+		BEvent e2 = new BEvent(processName, traceName, eventName, eventDate);
+		BEvent e3 = new BEvent(processName, traceName, eventName, eventDate);
 
 		assertEquals(e2, e3);
 		assertThat(e2).hasSameHashCodeAs(e3);
@@ -66,7 +66,7 @@ public class EventTest {
 	
 	@Test
 	public void event_attributes() throws EventException {
-		BEvent e = BEvent.create(processName, traceName, eventName);
+		BEvent e = new BEvent(processName, traceName, eventName);
 		e.setProcessAttribute("pa", "v1");
 		e.setTraceAttribute("ta", "v2");
 		e.setEventAttribute("ea", "v3");
@@ -79,7 +79,7 @@ public class EventTest {
 	@Test
 	public void event_attributes_xattributable() throws EventException {
 		Date date = new Date();
-		BEvent e = BEvent.create(processName, traceName, eventName);
+		BEvent e = new BEvent(processName, traceName, eventName);
 		e.setProcessAttribute("pa", new XAttributeLiteralImpl("pa", "v1"));
 		e.setTraceAttribute("ta", new XAttributeBooleanImpl("ta", false));
 		e.setEventAttribute("ea", new XAttributeDiscreteImpl("ea", 42));
@@ -95,7 +95,7 @@ public class EventTest {
 	
 	@Test
 	public void event_to_string() throws EventException {
-		BEvent e = BEvent.create(processName, traceName, eventName, eventDate);
+		BEvent e = new BEvent(processName, traceName, eventName, eventDate);
 		assertEquals(
 			"{concept:name=" + processName +"} - " +
 			"{concept:name=" + traceName + "} - " +

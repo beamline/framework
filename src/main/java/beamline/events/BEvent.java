@@ -17,11 +17,26 @@ import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeTimestamp;
-import org.deckfour.xes.model.XTrace;
 
 import beamline.exceptions.EventException;
 
 /**
+ * This class describes an event for the Beamline framework. An event is the
+ * minimal observable unit in the context of streaming process mining. Each
+ * event is expected to belong to a process instance which, in turn, belongs to
+ * a process. For this reason, when an event is created (for example using the
+ * {@link #BEvent(String, String, String)} constructor).
+ * 
+ * <p>
+ * Some level of compatibility with the OpenXES library is guaranteed by:
+ * <ul>
+ * 	<li>using the same attribute names for internally storing the name of the
+ * attributes;</li>
+ * 	<li>having the capability of setting attributes using the
+ * 	{@link #setTraceAttribute(String, XAttribute)} and
+ * 	{@link #setEventAttribute(String, XAttribute)} which take an
+ * 	{@link XAttribute} as parameter.</li>
+ * </ul>
  * 
  * @author Andrea Burattin
  */
@@ -34,18 +49,6 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	private Map<String, Serializable> processAttributes;
 
 	/**
-	 * Constructor of a new event
-	 */
-	public BEvent() {
-		this.eventAttributes = new HashMap<>();
-		this.traceAttributes = new HashMap<>();
-		this.processAttributes = new HashMap<>();
-	}
-	
-	//
-	// Factories
-	//
-	/**
 	 * Creates a new {@link BEvent} referring to one event
 	 *
 	 * @param processName the name of the process
@@ -53,11 +56,10 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	 * @param caseId the identifier of the process instance
 	 * @param time the time when the event has happened
 	 * @param eventAttributes a collection of string attributes for the event
-	 * @return the new event
 	 * @throws EventException this exception is thrown is incomplete information
 	 * is provided
 	 */
-	public static BEvent create(
+	public BEvent(
 			String processName,
 			String caseId,
 			String activityName,
@@ -67,22 +69,24 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 			throw new EventException("Activity name or case id missing");
 		}
 		
-		BEvent event = new BEvent();
-		event.setProcessName(processName);
-		event.setTraceName(caseId);
-		event.setEventName(activityName);
+		this.eventAttributes = new HashMap<>();
+		this.traceAttributes = new HashMap<>();
+		this.processAttributes = new HashMap<>();
+		
+		setProcessName(processName);
+		setTraceName(caseId);
+		setEventName(activityName);
 		if (time == null) {
-			event.setTimestamp(new Date());
+			setTimestamp(new Date());
 		} else {
-			event.setTimestamp(time);
+			setTimestamp(time);
 		}
 		
 		if (eventAttributes != null) {
 			for(Pair<String, String> a : eventAttributes) {
-				event.setEventAttribute(a.getLeft(), a.getRight());
+				setEventAttribute(a.getLeft(), a.getRight());
 			}
 		}
-		return event;
 	}
 	
 	/**
@@ -92,17 +96,15 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	 * @param activityName the name of the activity
 	 * @param caseId the identifier of the process instance
 	 * @param time the time when the event has happened
-	 * @return the new event
 	 * @throws EventException this exception is thrown is incomplete information
 	 * is provided
 	 */
-	public static BEvent create(String processName, String caseId, String activityName, Date time) throws EventException {
-		return create(processName, caseId, activityName, time, null);
+	public BEvent(String processName, String caseId, String activityName, Date time) throws EventException {
+		this(processName, caseId, activityName, time, null);
 	}
 	
 	/**
-	 * Creates a new {@link XTrace} referring to one event. The time of the
-	 * event is set to the current time
+	 * Creates a new {@link BEvent} referring to one event
 	 * 
 	 * @param processName the name of the process
 	 * @param activityName the name of the activity
@@ -111,41 +113,81 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	 * @throws EventException this exception is thrown is incomplete information
 	 * is provided
 	 */
-	public static BEvent create(String processName, String caseId, String activityName) throws EventException {
-		return create(processName, caseId, activityName, null, null);
+	public BEvent(String processName, String caseId, String activityName) throws EventException {
+		this(processName, caseId, activityName, null, null);
 	}
 	
 	//
 	// Specific methods
 	//
+	/**
+	 * Sets the process name
+	 * 
+	 * @param name the process name
+	 */
 	public void setProcessName(String name) {
 		setProcessAttribute(XConceptExtension.KEY_NAME, name);
 	}
 	
+	/**
+	 * Gets the process name
+	 * 
+	 * @return the process name
+	 */
 	public String getProcessName() {
 		return (String) processAttributes.get(XConceptExtension.KEY_NAME);
 	}
 	
+	/**
+	 * Sets the trace name (a.k.a. case id)
+	 * 
+	 * @param name the trace name
+	 */
 	public void setTraceName(String name) {
 		setTraceAttribute(XConceptExtension.KEY_NAME, name);
 	}
 	
+	/**
+	 * Gets the trace name (a.k.a. case id)
+	 * 
+	 * @return the trace name
+	 */
 	public String getTraceName() {
 		return (String) traceAttributes.get(XConceptExtension.KEY_NAME);
 	}
 	
+	/**
+	 * Sets the event name (a.k.a. activity name)
+	 * 
+	 * @param name the event name
+	 */
 	public void setEventName(String name) {
 		setEventAttribute(XConceptExtension.KEY_NAME, name);
 	}
 	
+	/**
+	 * Gets the event name (a.k.a. activity name)
+	 * 
+	 * @return the event name
+	 */
 	public String getEventName() {
 		return (String) eventAttributes.get(XConceptExtension.KEY_NAME);
 	}
 	
+	/**
+	 * Sets the event time
+	 * 
+	 * @param timestamp the event time
+	 */
 	public void setTimestamp(Date timestamp) {
 		setEventAttribute(XTimeExtension.KEY_TIMESTAMP, timestamp);
 	}
 	
+	/**
+	 * Gets the event time
+	 * 
+	 * @return the event time
+	 */
 	public Date getEventTime() {
 		return (Date) eventAttributes.get(XTimeExtension.KEY_TIMESTAMP);
 	}
@@ -153,39 +195,89 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	//
 	// General methods
 	//
-	
+	/**
+	 * Gets all event level attributes
+	 * 
+	 * @return the attributes
+	 */
 	public Map<String, Serializable> getEventAttributes() {
 		return eventAttributes;
 	}
 	
+	/**
+	 * Gets all trace level attributes
+	 * 
+	 * @return the attributes
+	 */
 	public Map<String, Serializable> getTraceAttributes() {
 		return traceAttributes;
 	}
 	
+	/**
+	 * Gets all process level attributes
+	 * 
+	 * @return the attributes
+	 */
 	public Map<String, Serializable> getProcessAttributes() {
 		return processAttributes;
 	}
 	
+	/**
+	 * Sets a event level attribute
+	 * 
+	 * @param name the attribute name
+	 * @param value the attribute value
+	 */
 	public void setEventAttribute(String name, Serializable value) {
 		eventAttributes.put(name, value);
 	}
 	
+	/**
+	 * Sets a event level attribute
+	 * 
+	 * @param name the attribute name
+	 * @param value the attribute value
+	 */
 	public void setEventAttribute(String name, XAttribute value) {
 		setAttributeFromXAttribute(eventAttributes, name, value);
 	}
 	
+	/**
+	 * Sets a trace level attribute
+	 * 
+	 * @param name the attribute name
+	 * @param value the attribute value
+	 */
 	public void setTraceAttribute(String name, Serializable value) {
 		traceAttributes.put(name, value);
 	}
 	
+	/**
+	 * Sets a trace level attribute
+	 * 
+	 * @param name the attribute name
+	 * @param value the attribute value
+	 */
 	public void setTraceAttribute(String name, XAttribute value) {
 		setAttributeFromXAttribute(traceAttributes, name, value);
 	}
 	
+	/**
+	 * Sets a process level attribute
+	 * 
+	 * @param name the attribute name
+	 * @param value the attribute value
+	 */
 	public void setProcessAttribute(String name, Serializable value) {
 		processAttributes.put(name, value);
 	}
 	
+	/**
+	 * Sets a process level attribute
+	 * 
+	 * @param name the attribute name
+	 * @param value the attribute value
+	 */
 	public void setProcessAttribute(String name, XAttribute value) {
 		setAttributeFromXAttribute(processAttributes, name, value);
 	}

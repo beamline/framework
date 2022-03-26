@@ -18,22 +18,22 @@ public class FiltersTest {
 	public void test_exclude_activities_on_name_filter() throws EventException, Exception {
 		ExcludeActivitiesFilter f = new ExcludeActivitiesFilter("A");
 		
-		assertTrue(f.filter(BEvent.create("", "", "B")));
-		assertFalse(f.filter(BEvent.create("", "", "A")));
+		assertTrue(f.filter(new BEvent("", "", "B")));
+		assertFalse(f.filter(new BEvent("", "", "A")));
 	}
 	
 	@Test
 	public void test_retain_activities_on_name_filter() throws EventException {
 		RetainActivitiesFilter f = new RetainActivitiesFilter("A");
 
-		assertTrue(f.filter(BEvent.create("", "", "A")));
-		assertFalse(f.filter(BEvent.create("", "", "B")));
+		assertTrue(f.filter(new BEvent("", "", "A")));
+		assertFalse(f.filter(new BEvent("", "", "B")));
 	}
 	
 	@Test
 	public void test_retain_activities_on_case_attribute_filter() throws EventException {
-		BEvent e1 = BEvent.create("", "", "");
-		BEvent e2 = BEvent.create("", "", "");
+		BEvent e1 = new BEvent("", "", "");
+		BEvent e2 = new BEvent("", "", "");
 		
 		e1.getTraceAttributes().put("a", "v1");
 		e2.getTraceAttributes().put("a", "v2");
@@ -46,8 +46,8 @@ public class FiltersTest {
 	
 	@Test
 	public void test_exclude_activities_on_case_attribute_filter() throws EventException {
-		BEvent e1 = BEvent.create("", "", "");
-		BEvent e2 = BEvent.create("", "", "");
+		BEvent e1 = new BEvent("", "", "");
+		BEvent e2 = new BEvent("", "", "");
 		
 		e1.getTraceAttributes().put("a", "v1");
 		e2.getTraceAttributes().put("a", "v2");

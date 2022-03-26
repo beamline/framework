@@ -126,7 +126,7 @@ public class XesLogSource extends BeamlineAbstractSource {
 		events = new LinkedList<>();
 		for (XTrace t : log) {
 			for (XEvent e : t) {
-				BEvent be = BEvent.create(
+				BEvent be = new BEvent(
 					processName,
 					XConceptExtension.instance().extractName(t),
 					XConceptExtension.instance().extractName(e),

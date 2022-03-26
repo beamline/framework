@@ -15,7 +15,7 @@ public class StringTestSource extends BeamlineAbstractSource {
 	public void run(SourceContext<BEvent> ctx) throws Exception {
 		for (int j = 0; j < traces.length; j++) {
 			for (int i = 0; i < traces[j].length(); i++) {
-				ctx.collect(BEvent.create("test-process", "case-"+j, traces[j].substring(i, i+1)));
+				ctx.collect(new BEvent("test-process", "case-"+j, traces[j].substring(i, i+1)));
 			}
 		}
 	}
