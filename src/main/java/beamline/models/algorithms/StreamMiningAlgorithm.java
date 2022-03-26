@@ -52,7 +52,7 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 	 * moved forward into the pipeline.
 	 * 
 	 * @param event the new event being observed
-	 * @return the result of the mining of the event, or <tt>null</tt> if
+	 * @return the result of the mining of the event, or <code>null</code> if
 	 * nothing should go through the rest of the pipeline
 	 */
 	public abstract T ingest(BEvent event);
