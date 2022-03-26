@@ -48,8 +48,8 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 	 * is the result of the mining.
 	 * 
 	 * <p>
-	 * If this method returns value <tt>null</tt>, then the value is not moved
-	 * forward into the pipeline.
+	 * If this method returns value <code>null</code>, then the value is not
+	 * moved forward into the pipeline.
 	 * 
 	 * @param event the new event being observed
 	 * @return the result of the mining of the event, or <tt>null</tt> if
