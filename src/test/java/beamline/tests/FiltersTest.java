@@ -18,16 +18,16 @@ public class FiltersTest {
 	public void test_exclude_activities_on_name_filter() throws EventException, Exception {
 		ExcludeActivitiesFilter f = new ExcludeActivitiesFilter("A");
 		
-		assertTrue(f.filter(BEvent.create("", "B", "")));
-		assertFalse(f.filter(BEvent.create("", "A", "")));
+		assertTrue(f.filter(BEvent.create("", "", "B")));
+		assertFalse(f.filter(BEvent.create("", "", "A")));
 	}
 	
 	@Test
 	public void test_retain_activities_on_name_filter() throws EventException {
 		RetainActivitiesFilter f = new RetainActivitiesFilter("A");
 
-		assertTrue(f.filter(BEvent.create("", "A", "")));
-		assertFalse(f.filter(BEvent.create("", "B", "")));
+		assertTrue(f.filter(BEvent.create("", "", "A")));
+		assertFalse(f.filter(BEvent.create("", "", "B")));
 	}
 	
 	@Test

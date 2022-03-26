@@ -29,16 +29,16 @@ public class ResponsesTest {
 	
 	@Test
 	public void directly_follow_tests() throws EventException {
-		BEvent e1 = BEvent.create("p", "a", "c1");
-		BEvent e2 = BEvent.create("p", "a", "c2");
+		BEvent e1 = BEvent.create("p", "c1", "a");
+		BEvent e2 = BEvent.create("p", "c2", "a");
 		
 		assertThrows(IllegalArgumentException.class, () -> new DirectlyFollowsRelation(e1, e2));
 		
-		BEvent e21 = BEvent.create("p", "a", "c1");
-		BEvent e22 = BEvent.create("p", "b", "c1");
-		BEvent e23 = BEvent.create("p", "a", "c2");
-		BEvent e24 = BEvent.create("p", "b", "c2");
-		BEvent e25 = BEvent.create("p", "d", "c1");
+		BEvent e21 = BEvent.create("p", "c1", "a");
+		BEvent e22 = BEvent.create("p", "c1", "b");
+		BEvent e23 = BEvent.create("p", "c2", "a");
+		BEvent e24 = BEvent.create("p", "c2", "b");
+		BEvent e25 = BEvent.create("p", "c1", "d");
 
 		DirectlyFollowsRelation df = new DirectlyFollowsRelation(e21, e22);
 		DirectlyFollowsRelation df2 = new DirectlyFollowsRelation(e23, e24);
@@ -53,15 +53,15 @@ public class ResponsesTest {
 	
 	@Test
 	public void test_equals() throws EventException {
-		BEvent e21 = BEvent.create("p", "a", "c1");
-		BEvent e22 = BEvent.create("p", "b", "c1");
-		BEvent e23 = BEvent.create("p", "a", "c2");
-		BEvent e24 = BEvent.create("p", "b", "c2");
+		BEvent e21 = BEvent.create("p", "c1", "a");
+		BEvent e22 = BEvent.create("p", "c1", "b");
+		BEvent e23 = BEvent.create("p", "c2", "a");
+		BEvent e24 = BEvent.create("p", "c2", "b");
 		
 		DirectlyFollowsRelation df = new DirectlyFollowsRelation(e21, e22);
 		DirectlyFollowsRelation df2 = new DirectlyFollowsRelation(e23, e24);
 		
-		assertThat(df).isEqualTo(df).hasSameHashCodeAs(df2);
+		assertThat(df).isEqualTo(df).hasSameHashCodeAs(df2).isNotEqualTo("").isNotEqualTo(null);
 	}
 	
 	@Test

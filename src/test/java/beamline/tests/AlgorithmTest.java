@@ -31,10 +31,10 @@ public class AlgorithmTest {
 		StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 		env
 			.fromElements(
-				BEvent.create("p", "3", "c1"),
-				BEvent.create("p", "7", "c1"),
-				BEvent.create("p", "11", "c1"),
-				BEvent.create("p", "13", "c1"))
+				BEvent.create("p", "c1", "3"),
+				BEvent.create("p", "c1", "7"),
+				BEvent.create("p", "c1", "11"),
+				BEvent.create("p", "c1", "13"))
 			.keyBy(BEvent::getProcessName)
 			.flatMap(m)
 			.executeAndCollect().forEachRemaining((StringResponse e) -> {
