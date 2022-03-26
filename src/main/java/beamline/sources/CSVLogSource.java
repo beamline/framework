@@ -84,7 +84,7 @@ public class CSVLogSource extends BeamlineAbstractSource {
 					attributes.add(Pair.of("attribute_" + i, line[i]));
 				}
 				synchronized (ctx.getCheckpointLock()) {
-					ctx.collect(BEvent.create(filename, line[activityNameColumn], line[caseIdColumn], null, attributes));
+					ctx.collect(BEvent.create(filename, line[caseIdColumn], line[activityNameColumn], null, attributes));
 				}
 			}
 		} catch (IOException e) {

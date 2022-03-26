@@ -31,7 +31,7 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	
 	private Map<String, Serializable> eventAttributes;
 	private Map<String, Serializable> traceAttributes;
-	private Map<String, Serializable> logAttributes;
+	private Map<String, Serializable> processAttributes;
 
 	/**
 	 * Constructor of a new event
@@ -39,7 +39,7 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	public BEvent() {
 		this.eventAttributes = new HashMap<>();
 		this.traceAttributes = new HashMap<>();
-		this.logAttributes = new HashMap<>();
+		this.processAttributes = new HashMap<>();
 	}
 	
 	//
@@ -59,8 +59,8 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	 */
 	public static BEvent create(
 			String processName,
-			String activityName,
 			String caseId,
+			String activityName,
 			Date time,
 			Collection<Pair<String, String>> eventAttributes) throws EventException {
 		if (processName == null || activityName == null || caseId == null) {
@@ -96,8 +96,8 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	 * @throws EventException this exception is thrown is incomplete information
 	 * is provided
 	 */
-	public static BEvent create(String processName, String activityName, String caseId, Date time) throws EventException {
-		return create(processName, activityName, caseId, time, null);
+	public static BEvent create(String processName, String caseId, String activityName, Date time) throws EventException {
+		return create(processName, caseId, activityName, time, null);
 	}
 	
 	/**
@@ -111,19 +111,19 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	 * @throws EventException this exception is thrown is incomplete information
 	 * is provided
 	 */
-	public static BEvent create(String processName, String activityName, String caseId) throws EventException {
-		return create(processName, activityName, caseId, null, null);
+	public static BEvent create(String processName, String caseId, String activityName) throws EventException {
+		return create(processName, caseId, activityName, null, null);
 	}
 	
 	//
 	// Specific methods
 	//
 	public void setProcessName(String name) {
-		setLogAttribute(XConceptExtension.KEY_NAME, name);
+		setProcessAttribute(XConceptExtension.KEY_NAME, name);
 	}
 	
 	public String getProcessName() {
-		return (String) logAttributes.get(XConceptExtension.KEY_NAME);
+		return (String) processAttributes.get(XConceptExtension.KEY_NAME);
 	}
 	
 	public void setTraceName(String name) {
@@ -162,8 +162,8 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 		return traceAttributes;
 	}
 	
-	public Map<String, Serializable> getLogAttributes() {
-		return logAttributes;
+	public Map<String, Serializable> getProcessAttributes() {
+		return processAttributes;
 	}
 	
 	public void setEventAttribute(String name, Serializable value) {
@@ -182,12 +182,12 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 		setAttributeFromXAttribute(traceAttributes, name, value);
 	}
 	
-	public void setLogAttribute(String name, Serializable value) {
-		logAttributes.put(name, value);
+	public void setProcessAttribute(String name, Serializable value) {
+		processAttributes.put(name, value);
 	}
 	
-	public void setLogAttribute(String name, XAttribute value) {
-		setAttributeFromXAttribute(logAttributes, name, value);
+	public void setProcessAttribute(String name, XAttribute value) {
+		setAttributeFromXAttribute(processAttributes, name, value);
 	}
 	
 	//
@@ -196,7 +196,7 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	
 	@Override
 	public String toString() {
-		return logAttributes.toString() + " - " + traceAttributes.toString() + " - " + eventAttributes.toString();
+		return processAttributes.toString() + " - " + traceAttributes.toString() + " - " + eventAttributes.toString();
 	}
 
 	@Override
@@ -220,8 +220,7 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 		}
 		BEvent other = (BEvent) obj;
 		return new EqualsBuilder()
-				.appendSuper(super.equals(obj))
-				.append(logAttributes, other.logAttributes)
+				.append(processAttributes, other.processAttributes)
 				.append(traceAttributes, other.traceAttributes)
 				.append(eventAttributes, other.eventAttributes)
 				.isEquals();
@@ -231,7 +230,7 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17, 37)
-				.append(logAttributes)
+				.append(processAttributes)
 				.append(traceAttributes)
 				.append(eventAttributes)
 				.toHashCode();
@@ -244,14 +243,14 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	private void setAttributeFromXAttribute(Map<String, Serializable> map, String name, XAttribute value) {
 		if (value instanceof XAttributeBoolean) {
 			map.put(name, ((XAttributeBoolean) value).getValue());
+		} else if (value instanceof XAttributeTimestamp) {
+			map.put(name, ((XAttributeTimestamp) value).getValue());
 		} else if (value instanceof XAttributeContinuous) {
 			map.put(name, ((XAttributeContinuous) value).getValue());
 		} else if (value instanceof XAttributeDiscrete) {
 			map.put(name, ((XAttributeDiscrete) value).getValue());
 		} else if (value instanceof XAttributeLiteral) {
 			map.put(name, ((XAttributeLiteral) value).getValue());
-		} else if (value instanceof XAttributeTimestamp) {
-			map.put(name, ((XAttributeTimestamp) value).getValue());
 		}
 	}
 }

@@ -128,13 +128,13 @@ public class XesLogSource extends BeamlineAbstractSource {
 			for (XEvent e : t) {
 				BEvent be = BEvent.create(
 					processName,
-					XConceptExtension.instance().extractName(e),
 					XConceptExtension.instance().extractName(t),
+					XConceptExtension.instance().extractName(e),
 					XTimeExtension.instance().extractTimestamp(e));
 				
 				// log attributes
 				for (Map.Entry<String, XAttribute> v : log.getAttributes().entrySet()) {
-					be.setLogAttribute(v.getKey(), v.getValue());
+					be.setProcessAttribute(v.getKey(), v.getValue());
 				}
 				
 				// trace attributes
