@@ -2,7 +2,6 @@ package beamline.models.algorithms;
 
 import java.io.IOException;
 
-import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
@@ -14,8 +13,14 @@ import beamline.models.responses.Response;
 
 /**
  * This abstract class defines the root of the mining algorithms hierarchy. It
- * is a {@link MapFunction} of elements with type {@link BEvent} that is capable
- * of producing responses of type {@link Response}.
+ * is a {@link RichFlatMapFunction} of elements with type {@link BEvent} that is
+ * capable of producing responses of type {@link Response}.
+ * 
+ * <p>
+ * Since this map is actually "rich" this means that classes that extends this
+ * one can have access to the state of the operator and use it in a distributed
+ * fashion. Additionally, being this map a "flat" it might return 0 or 1 results
+ * for each event being consumed.
  * 
  * @author Andrea Burattin
  */
@@ -42,8 +47,13 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 	 * The argument of the method is the new observation and the returned value
 	 * is the result of the mining.
 	 * 
+	 * <p>
+	 * If this method returns value <tt>null</tt>, then the value is not moved
+	 * forward into the pipeline.
+	 * 
 	 * @param event the new event being observed
-	 * @return the result of the mining of the event
+	 * @return the result of the mining of the event, or <tt>null</tt> if
+	 * nothing should go through the rest of the pipeline
 	 */
 	public abstract T ingest(BEvent event);
 	

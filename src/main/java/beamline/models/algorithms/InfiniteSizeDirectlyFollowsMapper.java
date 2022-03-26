@@ -3,13 +3,11 @@ package beamline.models.algorithms;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.deckfour.xes.model.XTrace;
-
 import beamline.events.BEvent;
 import beamline.models.responses.DirectlyFollowsRelation;
 
 /**
- * This mapper transforms a stream of {@link XTrace}s into a stream of
+ * This mapper transforms a stream of {@link BEvent}s into a stream of
  * {@link DirectlyFollowsRelation}s. It transforms each pair of consequent
  * events appearing in the same case as a directly follows operator (generating
  * an object with type {@link DirectlyFollowsRelation}).
