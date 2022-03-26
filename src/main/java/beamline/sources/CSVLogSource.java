@@ -20,8 +20,8 @@ import beamline.events.BEvent;
 import beamline.exceptions.SourceException;
 
 /**
- * This implementation of a {@link BeamlineAbstractSource} produces events
- * according to the events contained in a CSV file.
+ * This implementation of a {@link BeamlineAbstractSource} produces
+ * {@link BEvent} according to the rows contained in a CSV file.
  * 
  * @author Andrea Burattin
  */

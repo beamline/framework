@@ -5,9 +5,14 @@ import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import beamline.events.BEvent;
 
 /**
- * This interface is supposed to bind the type of {@link RichSourceFunction} to
- * {@link BEvent} and to provide minimal infrastructure to check if the sourece
- * is currently running.
+ * This class represents the general source to generate {@link BEvent}s. The
+ * goal of the class is to bind the type of the underlying
+ * {@link RichSourceFunction} to {@link BEvent} as well as provide basic
+ * management for running/not running.
+ * 
+ * <p>
+ * Since the source is a "rich" one, it means that it is possible to access the
+ * state from within all sources derived from this one.
  * 
  * @author Andrea Burattin
  */

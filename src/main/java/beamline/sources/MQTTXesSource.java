@@ -22,8 +22,7 @@ import beamline.exceptions.SourceException;
  * <p>
  * Example of usage:
  * <pre>
- * XesSource source = new MQTTXesSource("tcp://broker.hivemq.com:1883", "topicBase", "processName");
- * source.prepare();
+ * MQTTXesSource source = new MQTTXesSource("tcp://broker.hivemq.com:1883", "topicBase", "processName");
  * </pre>
  * 
  * <p>
