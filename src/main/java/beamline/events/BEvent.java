@@ -109,7 +109,6 @@ public class BEvent implements Serializable, Comparable<BEvent> {
 	 * @param processName the name of the process
 	 * @param activityName the name of the activity
 	 * @param caseId the identifier of the process instance
-	 * @return the new event
 	 * @throws EventException this exception is thrown is incomplete information
 	 * is provided
 	 */
