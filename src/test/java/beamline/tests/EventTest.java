@@ -33,7 +33,7 @@ public class EventTest {
 		assertThrows(EventException.class, () -> BEvent.create(null, "", ""));
 		
 		BEvent e = BEvent.create(processName, traceName, eventName, eventDate, Set.of(Pair.of("a1", "v1")));
-		assertEquals(e.getEventAttributes().get("a1"), "v1");
+		assertEquals("v1", e.getEventAttributes().get("a1"));
 	}
 	
 	@Test
@@ -86,11 +86,11 @@ public class EventTest {
 		e.setEventAttribute("ea2", new XAttributeContinuousImpl("ea2", 3.14));
 		e.setEventAttribute("ea3", new XAttributeTimestampImpl("ea3", date));
 		
-		assertEquals(e.getProcessAttributes().get("pa"), "v1");
-		assertEquals(e.getTraceAttributes().get("ta"), false);
-		assertEquals(e.getEventAttributes().get("ea"), 42l);
-		assertEquals(e.getEventAttributes().get("ea2"), 3.14);
-		assertEquals(e.getEventAttributes().get("ea3"), date);
+		assertEquals("v1", e.getProcessAttributes().get("pa"));
+		assertEquals(false, e.getTraceAttributes().get("ta"));
+		assertEquals(42l, e.getEventAttributes().get("ea"));
+		assertEquals(3.14, e.getEventAttributes().get("ea2"));
+		assertEquals(date, e.getEventAttributes().get("ea3"));
 	}
 	
 	@Test
