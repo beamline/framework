@@ -22,7 +22,7 @@ And then the actual dependency:
 </dependency>
 ```
 
-Some additional metrics from SonarCloud:
+Some additional metrics from SonarCloud:  
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=beamline_framework&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=beamline_framework)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=beamline_framework&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=beamline_framework)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=beamline_framework&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=beamline_framework)
