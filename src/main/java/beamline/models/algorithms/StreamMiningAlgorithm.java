@@ -84,8 +84,8 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 			long value = 1;
 			if (processedEvents != null && processedEvents.value() != null) {
 				value = processedEvents.value() + 1;
+				processedEvents.update(value);
 			}
-			processedEvents.update(value);
 		} catch (IOException e) {
 			// this exception would mean that there are serialization issues
 		}
