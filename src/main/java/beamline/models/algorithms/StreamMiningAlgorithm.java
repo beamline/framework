@@ -82,7 +82,7 @@ public abstract class StreamMiningAlgorithm<T extends Response> extends RichFlat
 	protected T process(BEvent event) {
 		try {
 			long value = 1;
-			if (processedEvents == null || processedEvents.value() != null) {
+			if (processedEvents != null && processedEvents.value() != null) {
 				value = processedEvents.value() + 1;
 			}
 			processedEvents.update(value);
